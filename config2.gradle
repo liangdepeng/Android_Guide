@@ -1,0 +1,166 @@
+ext {
+
+    android = [
+            compileSdkVersion: 29,
+            buildToolsVersion: "30.0.1",
+
+            applicationId    : "com.dapeng.online",
+            minSdkVersion    : 21,
+            targetSdkVersion : 29,
+            versionCode      : 1,
+            versionName      : "1.0.0"
+    ]
+
+    libsVersion = [
+            gson = "2.8.6",
+            glide = "4.11.0"
+    ]
+
+    dependencies = [
+            // json 解析
+            gson                      : "com.google.code.gson:gson:$rootProject.gson",
+            fastjson                  : 'com.alibaba:fastjson:1.2.73',
+
+            // 路由框架
+            // 替换成最新版本, 需要注意的是api
+            // 要与compiler匹配使用，均使用最新版可以保证兼容
+            arouter                   : 'com.alibaba:arouter-api:1.5.0',
+            arouterannotationProcessor: 'com.alibaba:arouter-compiler:1.2.2',
+
+            // 图片加载 Glide
+            glide                     : "com.github.bumptech.glide:glide:$rootProject.glide",
+            // 注解依赖  （ ps: kotlin使用要依赖 kapt 看官网）
+            glideComplier             : "com.github.bumptech.glide:compiler:4.11.0",
+
+            // 安卓 MaterialDesign
+            materialDesign            : 'com.google.android.material:material:1.2.0',
+
+            "constraint_layout"       : 'androidx.constraintlayout:constraintlayout:2.0.4',
+
+            //--------------------------------------------------------------------------------------------
+            // ----------https://developer.android.google.cn/jetpack/androidx/releases/lifecycle#java--  |
+            // lifecycle 框架
+            // ViewModel and LiveData (androidx 以下)
+            lifecycleextensions       : "android.arch.lifecycle:extensions:1.1.1",
+            // alternatively, just ViewModel (androidx 以下)
+            viewmodel                 : "android.arch.lifecycle:viewmodel:1.1.1",
+            // alternatively, just LiveData (androidx 以下)
+            livedata                  : "android.arch.lifecycle:livedata:1.1.1",
+
+            // ViewModel  (androidx )
+            viewmodelX                : "androidx.lifecycle:lifecycle-viewmodel:2.2.0",
+            // LiveData  (androidx )
+            livedataX                 : "androidx.lifecycle:lifecycle-livedata:2.2.0",
+            // alternately - if using Java8, use the following instead of lifecycle-compiler
+            lifecycle_java8X          : "androidx.lifecycle:lifecycle-common-java8:2.2.0",
+            //--------------------------------------------------------------------------
+
+            // recyclerview 分组列表 https://github.com/Liang-depeng/GroupedRecyclerViewAdapter
+            GroupedRecyclerViewAdapter: 'com.github.donkingliang:GroupedRecyclerViewAdapter:2.3.0',
+
+
+            // 智能刷新布局框架 刷新布局
+            smartRefreshLayout        : 'com.scwang.smart:refresh-layout-kernel:2.0.1',      //核心必须依赖
+            classicsheader            : 'com.scwang.smart:refresh-header-classics:2.0.1',    //经典刷新头
+            radarheader               : 'com.scwang.smart:refresh-header-radar:2.0.1',       //雷达刷新头
+            falsifyheader             : 'com.scwang.smart:refresh-header-falsify:2.0.1',     //虚拟刷新头
+            materialheader            : 'com.scwang.smart:refresh-header-material:2.0.1',    //谷歌刷新头
+            twoheader                 : 'com.scwang.smart:refresh-header-two-level:2.0.1',   //二级刷新头
+            footerball                : 'com.scwang.smart:refresh-footer-ball:2.0.1',        //球脉冲加载
+            footerclassics            : 'com.scwang.smart:refresh-footer-classics:2.0.1',    //经典加载
+
+            // bugly 腾讯bugly 在线统计上报app Crash等问题
+            bugly                     : 'com.tencent.bugly:crashreport:latest.release',
+
+            // 安卓一个 动画库
+            lottie                    : 'com.airbnb.android:lottie:3.4.0',
+
+            // 选中按钮 设置按钮
+            switchbutton              : 'com.github.zcweng:switch-button:0.0.3@aar',
+
+            // https://github.com/bytedance/AlphaPlayer AlphaPlayer是直播中台使用的一个视频动画特效SDK
+            alphaPlayer               : 'com.github.bytedance:AlphaPlayer:1.0.2',
+
+            // 权限请求 https://github.com/tbruyelle/RxPermissions 配合 rxjava
+            rxpermissions             : 'com.github.tbruyelle:rxpermissions:0.12',
+            rxjava                    : 'io.reactivex.rxjava3:rxjava:3.0.4',
+            rxandroid                 : 'io.reactivex.rxjava3:rxandroid:3.0.0',
+
+            // https://github.com/Curzibn/Luban 鲁班 图片压缩
+            Luban                     : 'top.zibin:Luban:1.1.8',
+
+            // 安卓 SQLite 数据库操作 https://github.com/guolindev/LitePal
+            litepal                   : 'org.litepal.guolindev:core:3.2.1',
+
+            //api 'com.google.dagger:dagger-android:2.28.3'
+            //api 'com.google.dagger:dagger-android-support:2.x' // if you use the support libraries
+            //annotationProcessor 'com.google.dagger:dagger-android-processor:2.x'
+            //Java和Android的快速依赖关系注入器。
+            //Dagger是用于依赖项注入的编译时框架。它不使用反射或运行时字节码生成，而是在编译时进行所有分析，并生成纯Java源代码
+
+
+            // 基础工具库  https://github.com/Tamsiree/RxTool --------------------------
+            RxKit                     : 'com.github.tamsiree.RxTool:RxKit:2.6.2',
+            //UI库
+            RxUI                      : 'com.github.tamsiree.RxTool:RxUI:2.6.2',
+            //相机库
+            RxCamera                  : 'com.github.tamsiree.RxTool:RxCamera:2.6.2',
+            //功能库（Zxing扫描与生成二维码条形码）
+            RxFeature                 : 'com.github.tamsiree.RxTool:RxFeature:2.6.2',
+            //ArcGis For Android工具库（API：100.1以上版本）
+            RxArcGisKit               : 'com.github.tamsiree.RxTool:RxArcGisKit:2.6.2',
+            //支付模块(支付宝 微信)[暂为待优化模块，谨慎]
+            RxPay                     : 'com.github.tamsiree.RxTool:RxPay:2.6.2',
+            // --------------------RxTool----------------------------------------------
+
+
+            // 网络访问
+            okhttp                    : "com.squareup.okhttp3:okhttp:4.8.1",
+
+            volley                    : 'com.android.volley:volley:1.1.1',
+
+            // https://github.com/square/retrofit
+            retrofit                  : "com.squareup.retrofit2:retrofit:2.5.0",
+            retrofitgson              : "com.squareup.retrofit2:converter-gson:2.5.0",
+
+            // https://github.com/wyouflf/xUtils3 xUtils
+            // 包含了orm, http(s), image, view注解, 但依然很轻量级(251K), 并且特性强大, 方便扩展.
+            xutils                    : 'org.xutils:xutils:3.9.0',
+
+            // 圆形图片
+            circleimageview           : 'de.hdodenhof:circleimageview:3.1.0',
+            // 点赞动画按钮
+            likeButton                : 'com.github.jd-alexander:LikeButton:0.2.3',
+
+            //图片选择
+            PictureSelector           : 'com.github.LuckSiege.PictureSelector:picture_library:v2.5.6',
+            //查看大图
+            bigImageViewPager         : 'com.github.SherlockGougou:BigImageViewPager:androidx-6.0.1',
+            banner                    : 'com.youth.banner:banner:2.1.0',
+            viewpager2                : 'androidx.viewpager2:viewpager2:1.0.0',
+
+            // 安卓 Toast 框架 https://github.com/getActivity/ToastUtils
+            toastUtils                : 'com.hjq:toast:8.8',
+            // https://github.com/getActivity/XToast
+            xtoastUtils               : 'com.hjq:xtoast:6.5',
+
+
+            Android_PickerView        : 'com.contrarywind:Android-PickerView:4.1.8',
+
+            // App Startup是一个可以用于加速App启动速度的一个库, 主要是用于第三方库的自动初始化，不用显示调用初始化。
+            // 对于第三方库开发人员来说，避免了 手动调用初始化，也可以手动控制
+            startup                   : "androidx.startup:startup-runtime:1.0.0-alpha01",
+
+            eventbus                  : "org.greenrobot:eventbus:3.2.0",
+
+            // https://github.com/Justson/AgentWeb
+            // AgentWeb 是一个基于的 Android WebView ，极度容易使用以及功能强大的库
+            // ，提供了 Android WebView 一系列的问题解决方案 ，并且轻量和极度灵活
+            agentweb                  : 'com.just.agentweb:agentweb-androidx:4.1.4', // (必选)
+            filechooser               : 'com.just.agentweb:filechooser-androidx:4.1.4',// (可选)
+            downloader                : 'com.download.library:downloader-androidx:4.1.4'// (可选)
+
+    ]
+
+
+}

@@ -1,0 +1,9 @@
+ext {
+
+    android = [
+
+    ]
+
+    // 是否模块单独编译
+    isAloneBuild = false
+}
