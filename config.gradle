@@ -4,6 +4,6 @@ ext {
 
     ]
 
-    // 是否模块单独编译
+    // 是否模块单独编译 组件化开发业务module单独运行开关
     isAloneBuild = false
 }
