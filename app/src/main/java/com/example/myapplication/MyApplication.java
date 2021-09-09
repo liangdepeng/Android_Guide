@@ -4,8 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 
-import com.example.commom_module.AppMoudleConfig;
-import com.example.commom_module.IAppComponent;
+import com.example.commom_module.AppContext;
 import com.example.commom_module.JumpServiceFactory;
 
 /**
@@ -23,9 +22,12 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        context = getApplicationContext();
+
         // 组建通信初始化
         JumpServiceFactory.INSTANCE.init(AppComponent.class.getName());
-        context = getApplicationContext();
+        // application context
+        AppContext.init(context);
     }
 
     public static Context getAppContext() {

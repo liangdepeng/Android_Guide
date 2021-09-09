@@ -21,7 +21,7 @@ public enum DataBaseDao {
     // instance
     INSTANCE;
 
-    private final String DB_NAME = "words";
+    private final static String DB_NAME = "words";
 
     private DataBeseHelper getDataBase() {
         return DataBeseHelper.getInstance();

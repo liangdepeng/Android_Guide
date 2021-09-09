@@ -3,20 +3,21 @@ package com.example.myapplication
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.commom_module.isBold
 import com.example.module_play.PlayTestActivity
-import com.example.myapplication.life.LifeActivity
 import com.example.myapplication.base.ClassBean
 import com.example.myapplication.database.DataBaseActivity
 import com.example.myapplication.databinding.ActivityMainBinding
+import com.example.myapplication.life.LifeActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        TextView(this).isBold=true
 
         val list = arrayListOf(ClassBean().apply {
             aClass = LifeActivity::class.java
