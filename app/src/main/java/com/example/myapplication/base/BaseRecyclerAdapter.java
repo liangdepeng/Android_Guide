@@ -6,8 +6,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +27,13 @@ public abstract class BaseRecyclerAdapter<T, ViewHolder extends BaseViewHolder> 
 
     public final void setList(List<T> list) {
         mList.clear();
-        mList.addAll(list);
+        if (list != null)
+            mList.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public final void addData(T data){
+        mList.add(data);
         notifyDataSetChanged();
     }
 
@@ -53,5 +57,9 @@ public abstract class BaseRecyclerAdapter<T, ViewHolder extends BaseViewHolder> 
 
     public boolean isLastPosition(int position) {
         return position == mList.size() - 1;
+    }
+
+    public int getLastIndex(){
+        return mList.size()-1;
     }
 }

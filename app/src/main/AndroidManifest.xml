@@ -43,6 +43,9 @@
 
             </intent-filter>
         </activity>
+
+        <activity android:name=".service.ServiceActivity"/>
+        <service android:name=".service.MyService"/>
     </application>
 
 </manifest>

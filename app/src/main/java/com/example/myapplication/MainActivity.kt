@@ -18,6 +18,7 @@ import com.example.myapplication.base.ClassBean
 import com.example.myapplication.database.DataBaseActivity
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.life.LifeActivity
+import com.example.myapplication.service.ServiceActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-
         val list = arrayListOf(ClassBean().apply {
             aClass = LifeActivity::class.java
             classInfo = "生命周期"
@@ -40,6 +40,9 @@ class MainActivity : AppCompatActivity() {
         }, ClassBean().apply {
             aClass = DataBaseActivity::class.java
             classInfo = "dataBase"
+        }, ClassBean().apply {
+            aClass = ServiceActivity::class.java
+            classInfo = "Service"
         })
 
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
@@ -48,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         adapter.setOnItemClickListener(object : IClickListener {
             override fun onItemClick(adapter: Adapter, holder: ViewHolder, position: Int) {
                 val classBean = adapter.list[position]
-                if (classBean.aClass==LifeActivity::class.java){
+                if (classBean.aClass == LifeActivity::class.java) {
                     val intent = Intent()
                     intent.setData(Uri.parse("ldphahaha://ldplpptest/android_guide?param1=参数111&param2=参数222"))
                     intent.setAction(Intent.ACTION_VIEW)
