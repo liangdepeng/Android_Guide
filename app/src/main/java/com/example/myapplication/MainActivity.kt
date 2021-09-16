@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -12,7 +13,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.commom_module.isBold
 import com.example.module_play.PlayTestActivity
 import com.example.myapplication.base.ClassBean
 import com.example.myapplication.database.DataBaseActivity
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        TextView(this).isBold=true
+
 
         val list = arrayListOf(ClassBean().apply {
             aClass = LifeActivity::class.java
@@ -48,6 +48,13 @@ class MainActivity : AppCompatActivity() {
         adapter.setOnItemClickListener(object : IClickListener {
             override fun onItemClick(adapter: Adapter, holder: ViewHolder, position: Int) {
                 val classBean = adapter.list[position]
+                if (classBean.aClass==LifeActivity::class.java){
+                    val intent = Intent()
+                    intent.setData(Uri.parse("ldphahaha://ldplpptest/android_guide?param1=参数111&param2=参数222"))
+                    intent.setAction(Intent.ACTION_VIEW)
+                    startActivity(intent)
+                    return
+                }
                 startActivity(Intent(this@MainActivity, classBean.aClass))
             }
         })

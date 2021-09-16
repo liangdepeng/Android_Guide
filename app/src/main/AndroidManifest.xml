@@ -12,20 +12,35 @@
         android:theme="@style/Theme.MyApplication">
         <activity
             android:name=".database.DataBaseActivity"
-            android:label="数据库" />
+            android:label="数据库"
+            android:launchMode="singleInstance" />
         <activity android:name=".thread.ThreadTestActivity" />
         <!-- orientation|     |keyboardHidden -->
         <activity
             android:name=".life.LifeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="生命周期" />
+            android:label="生命周期">
+            <intent-filter>
+                <!-- scheme 跳转协议设置 随意设置 -->
+                <data
+                    android:host="ldplpptest"
+                    android:path="/android_guide"
+                    android:scheme="ldphahaha" />
+                <!-- scheme 跳转协议设置 下面必须设置 -->
+                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MainActivity"
             android:label="分类说明">
             <intent-filter>
+
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
         </activity>
     </application>

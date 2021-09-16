@@ -2,6 +2,7 @@ package com.example.myapplication.life
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.Toast
 import com.example.myapplication.R
 import com.example.myapplication.base.BaseActivity
 import com.example.myapplication.databinding.ActivityLifeBinding
@@ -33,6 +34,19 @@ class LifeActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
+
+        intent?.data?.let {
+
+            // ldphahaha://ldplpptest/android_guide?param1=参数111&param2=参数222
+
+            val param1 = it.getQueryParameter("param1")
+            val param2 = it.getQueryParameter("param2")
+
+            viewBinding.button.postDelayed(Runnable {
+                Toast.makeText(this,"scheme 跳转进来，参数\n param1 = $param1 \n param2 = $param2", Toast.LENGTH_LONG).show()
+            },3000)
+        }
+
 
         val fragment = LifeFragment()
         viewBinding.button.setOnClickListener {
