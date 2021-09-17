@@ -1,6 +1,5 @@
 package com.example.myapplication.database;
 
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -11,7 +10,7 @@ import com.example.myapplication.MyApplication;
  * <p>
  * Date: 2021/9/6
  * <p>
- * Summary:
+ * Summary: 创建数据库 初始化
  */
 public class DataBeseHelper extends SQLiteOpenHelper {
 

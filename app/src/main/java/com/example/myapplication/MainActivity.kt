@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         adapter.setOnItemClickListener(object : IClickListener {
             override fun onItemClick(adapter: Adapter, holder: ViewHolder, position: Int) {
                 val classBean = adapter.list[position]
+                // Scheme 协议 路由跳转测试
                 if (classBean.aClass == LifeActivity::class.java) {
                     val intent = Intent()
                     intent.setData(Uri.parse("ldphahaha://ldplpptest/android_guide?param1=参数111&param2=参数222"))

@@ -7,14 +7,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Created by ldp.
  * <p>
  * Date: 2021/9/6
  * <p>
- * Summary:
+ * Summary: RecyclerView.ViewHolder 简易封装 配合 BaseRecyclerAdapter
  */
 public class BaseViewHolder extends RecyclerView.ViewHolder {
 

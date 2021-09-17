@@ -15,7 +15,7 @@ import java.util.List;
  * <p>
  * Date: 2021/9/6
  * <p>
- * Summary:
+ * Summary: 数据库操作业务封装
  */
 public enum DataBaseDao {
     // instance

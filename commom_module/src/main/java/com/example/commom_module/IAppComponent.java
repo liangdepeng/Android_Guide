@@ -1,13 +1,11 @@
 package com.example.commom_module;
 
-import android.app.Application;
-
 /**
  * Created by ldp.
  * <p>
  * Date: 2021/9/2
  * <p>
- * Summary:
+ * Summary: 组件通信各个模块服务初始化
  */
 public interface IAppComponent {
     void onCreate();

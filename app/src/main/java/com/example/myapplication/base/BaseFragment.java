@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Date: 2021/9/2
  * <p>
- * Summary:
+ * Summary: BaseFragment
  */
 public class BaseFragment extends Fragment {
 

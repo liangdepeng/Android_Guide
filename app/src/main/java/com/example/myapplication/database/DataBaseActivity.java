@@ -1,10 +1,5 @@
 package com.example.myapplication.database;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -15,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.example.myapplication.MyApplication;
 import com.example.myapplication.R;
 import com.example.myapplication.base.BaseActivity;
@@ -23,8 +21,6 @@ import com.example.myapplication.base.BaseViewHolder;
 import com.example.myapplication.bean.WordBean;
 import com.example.myapplication.databinding.ActivityDataBaseBinding;
 import com.example.myapplication.help.SpUtils;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,11 +31,15 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * sqlite 数据库 演示
+ */
 public class DataBaseActivity extends BaseActivity {
 
     private ActivityDataBaseBinding binding;
     private DataBaseAdapter dataBaseAdapter;
     private List<WordBean> wordList;
+    // 线程池
     private final ExecutorService threadPool = Executors.newCachedThreadPool();
 
     @Override
@@ -90,6 +90,7 @@ public class DataBaseActivity extends BaseActivity {
                                 }
                             }
 
+                            // 单词库有10万多 节省时间演示  所以写入2000
                             if (count > 2000) {
                                 break;
                             }
@@ -120,6 +121,7 @@ public class DataBaseActivity extends BaseActivity {
                     dismissProgressDialog();
                     break;
                 case 2001:
+                    // 进度更新
                     progressDialog.setProgress(msg.arg1);
                     break;
                 default:

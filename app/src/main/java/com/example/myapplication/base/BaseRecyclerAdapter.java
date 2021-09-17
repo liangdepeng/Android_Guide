@@ -14,7 +14,7 @@ import java.util.List;
  * <p>
  * Date: 2021/9/6
  * <p>
- * Summary:
+ * Summary: RecyclerView.Adapter 简易封装
  */
 public abstract class BaseRecyclerAdapter<T, ViewHolder extends BaseViewHolder> extends RecyclerView.Adapter<ViewHolder> {
 

@@ -36,8 +36,11 @@ import java.lang.ref.WeakReference;
  */
 public class ServiceActivity extends AppCompatActivity {
 
+    // 布局绑定
     private ActivityServiceBinding binding;
+    // 这里用作计时器
     private MyHandler myHandler;
+    // recyclerview 适配器
     private BaseRecyclerAdapter<String, BaseViewHolder> recyclerAdapter;
 
     @Override
@@ -51,7 +54,7 @@ public class ServiceActivity extends AppCompatActivity {
         binding.serviceLaunchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 开启一个服务 不能和服务端通信
+                // startService 开启一个服务 不能和服务端通信 开启之后不能把控服务
                 Intent intent = new Intent(ServiceActivity.this, MyService.class);
                 startService(intent);
             }
@@ -62,13 +65,16 @@ public class ServiceActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                // 把服务和activity绑定，可以和服务端通信
                 if (isBind) {
+                    // 解绑
                     unbindService(connection);
                     myHandler.removeMessages(200);
                     isBind = false;
                     binding.serviceBindBtn.setText("绑定服务");
                 } else {
                     Intent intent = new Intent(ServiceActivity.this, MyService.class);
+                    // 绑定
                     isBind = bindService(intent, connection, BIND_AUTO_CREATE);
                     if (isBind)binding.serviceBindBtn.setText("解除绑定服务");
                 }
@@ -91,10 +97,15 @@ public class ServiceActivity extends AppCompatActivity {
             myService = myBinder.getService();
 
             if (myService != null) {
+                // 定时拉取服务端运行的数据
                 myHandler.sendEmptyMessageDelayed(200, 3000);
             }
         }
 
+        /**
+         * 服务由于异常情况中断调用
+         * @param name
+         */
         @Override
         public void onServiceDisconnected(ComponentName name) {
             myService = null;
@@ -132,6 +143,7 @@ public class ServiceActivity extends AppCompatActivity {
         binding.recyclerview.setAdapter(recyclerAdapter);
     }
 
+    // 自定义 静态内部类 handler 持有外部类弱引用 防止被存泄露
     private static class MyHandler extends Handler {
 
         private final WeakReference<ServiceActivity> reference;
@@ -148,6 +160,7 @@ public class ServiceActivity extends AppCompatActivity {
             if (msg.what == 200) {
 
                 if (reference.get() != null) {
+                    // 拉取服务端的消息 模拟通信
                     reference.get().recyclerAdapter.addData(reference.get().myService.getContent());
                     reference.get().binding.recyclerview.smoothScrollToPosition(reference.get().recyclerAdapter.getLastIndex());
                 }

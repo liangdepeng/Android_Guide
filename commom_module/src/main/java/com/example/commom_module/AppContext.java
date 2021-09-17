@@ -8,7 +8,7 @@ import android.content.Context;
  * <p>
  * Date: 2021/9/8
  * <p>
- * Summary:
+ * Summary: 全局获取 application Context
  */
 public class AppContext {
 
