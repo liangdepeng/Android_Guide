@@ -18,6 +18,8 @@ import java.net.Socket;
 /**
  * Socket 客户端
  * 在同一台电脑上 IntelliJ IDEA  运行对应的 服务端代码即可
+ *
+ * https://github.com/liangdepeng/java_All_practice/blob/master/src/http/SocketServer.java
  */
 public class SocketClientActivity extends AppCompatActivity {
 
