@@ -19,6 +19,7 @@ import com.example.myapplication.database.DataBaseActivity
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.life.LifeActivity
 import com.example.myapplication.service.ServiceActivity
+import com.example.myapplication.socket.SocketClientActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,6 +44,9 @@ class MainActivity : AppCompatActivity() {
         }, ClassBean().apply {
             aClass = ServiceActivity::class.java
             classInfo = "Service"
+        }, ClassBean().apply {
+            aClass = SocketClientActivity::class.java
+            classInfo = "Socket"
         })
 
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
