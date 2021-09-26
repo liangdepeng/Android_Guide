@@ -19,9 +19,14 @@ import java.net.Socket;
  * Socket 客户端
  * 在同一台电脑上 IntelliJ IDEA  运行对应的 服务端代码即可
  *
+ * 指定服务器的IP地址和端口  在本机上 打开cmd 输入 ipconfig 即可查看
+ *
  * https://github.com/liangdepeng/java_All_practice/blob/master/src/http/SocketServer.java
  */
 public class SocketClientActivity extends AppCompatActivity {
+
+    // 指定服务器的IP地址和端口
+    private final String testIp = "192.200.23.43";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +51,8 @@ public class SocketClientActivity extends AppCompatActivity {
 
     private void initTcpClient() {
         try {
-            //创建客户端Socket，指定服务器的IP地址和端口
-            Socket socket = new Socket("192.200.23.43", 1234);
+            //创建客户端Socket，指定服务器的IP地址和端口  在本机上 打开cmd 输入 ipconfig 即可查看
+            Socket socket = new Socket(testIp, 1234);
             //获取输出流，向服务器发送数据
             OutputStream outputStream = socket.getOutputStream();
             PrintWriter printWriter = new PrintWriter(outputStream);

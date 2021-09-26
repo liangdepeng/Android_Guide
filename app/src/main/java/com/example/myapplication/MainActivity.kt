@@ -15,12 +15,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.module_play.PlayTestActivity
 import com.example.myapplication.base.ClassBean
+import com.example.myapplication.camera.CameraActivity
 import com.example.myapplication.database.DataBaseActivity
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.life.LifeActivity
 import com.example.myapplication.service.ServiceActivity
 import com.example.myapplication.socket.SocketClientActivity
 
+/**
+ * 主界面
+ */
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy {
@@ -47,6 +51,9 @@ class MainActivity : AppCompatActivity() {
         }, ClassBean().apply {
             aClass = SocketClientActivity::class.java
             classInfo = "Socket"
+        },ClassBean().apply {
+            aClass= CameraActivity::class.java
+            classInfo = "camera"
         })
 
         binding.recyclerview.layoutManager = LinearLayoutManager(this)

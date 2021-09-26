@@ -12,10 +12,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.myapplication.thread.ExecutorHelper;
+
 import java.lang.ref.WeakReference;
 import java.util.Random;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 /**
  * Created by ldp.
@@ -27,17 +27,13 @@ import java.util.concurrent.Executors;
 public class MyService extends Service {
 
     private MyHandler myHandler;
-    private Executor executors;
 
     private MyBinder myBinder;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        executors = Executors.newCachedThreadPool();
         myHandler = new MyHandler(this);
-
-
         myBinder = new MyBinder();
     }
 
@@ -62,7 +58,7 @@ public class MyService extends Service {
             }
         };
 
-        executors.execute(runnable);
+        ExecutorHelper.getExec().execute(runnable);
 
         return super.onStartCommand(intent, flags, startId);
     }
