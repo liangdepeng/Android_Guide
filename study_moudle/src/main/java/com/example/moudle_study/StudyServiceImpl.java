@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.commom_module.IStudyService;
+import cn.example.common_module.IStudyService;
 
 /**
  * Created by ldp.

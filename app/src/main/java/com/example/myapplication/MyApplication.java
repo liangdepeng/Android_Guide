@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 
-import com.example.commom_module.AppContext;
-import com.example.commom_module.JumpServiceFactory;
+import cn.example.common_module.AppContext;
+import cn.example.common_module.JumpServiceFactory;
 
 /**
  * Created by ldp.

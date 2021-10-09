@@ -3,8 +3,8 @@ package com.example.module_play
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.commom_module.IStudyService
-import com.example.commom_module.JumpServiceFactory
+import cn.example.common_module.IStudyService
+import cn.example.common_module.JumpServiceFactory
 
 class PlayTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,7 +16,8 @@ class PlayTestActivity : AppCompatActivity() {
 
             // playmoudle 跳转 studymoudle 互不依赖 组件通信
             val iStudyService =
-                JumpServiceFactory.INSTANCE.getComponentService<IStudyService>(IStudyService::class.java.name)
+                JumpServiceFactory.INSTANCE.getComponentService<IStudyService>(
+                    IStudyService::class.java.name)
             iStudyService?.launchStudyTest(this, Bundle())
         }
 

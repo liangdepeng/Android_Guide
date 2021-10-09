@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-
         val list = arrayListOf(ClassBean().apply {
             aClass = LifeActivity::class.java
             classInfo = "生命周期"

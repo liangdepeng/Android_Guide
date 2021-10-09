@@ -1,11 +1,12 @@
 package com.example.myapplication;
 
-import com.example.commom_module.IAppComponent;
-import com.example.commom_module.IPlayService;
-import com.example.commom_module.IStudyService;
-import com.example.commom_module.JumpServiceFactory;
 import com.example.module_play.PlayServiceImpl;
 import com.example.moudle_study.StudyServiceImpl;
+
+import cn.example.common_module.IAppComponent;
+import cn.example.common_module.IPlayService;
+import cn.example.common_module.IStudyService;
+import cn.example.common_module.JumpServiceFactory;
 
 /**
  * Created by ldp.
