@@ -11,8 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Created by ldp.
  * <p>
@@ -22,8 +20,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BaseActivity extends AppCompatActivity {
 
-    private final String tag = "BaseActivitys";
+    private final String tag = "activity_lifecycle";
     private Handler handler;
+    private Runnable showRunnable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,7 +69,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         Log.e(tag, "--onSaveInstanceState-- " + getClass().getSimpleName());
     }
@@ -96,13 +95,23 @@ public class BaseActivity extends AppCompatActivity {
             progressDialog.setMessage(tips);
             progressDialog.setCanceledOnTouchOutside(false);
         }
-        if (!progressDialog.isShowing()) {
-            getMainHandler().post(new Runnable() {
+
+        if (progressDialog.isShowing())
+            return;
+
+        if (showRunnable == null) {
+            showRunnable = new Runnable() {
                 @Override
                 public void run() {
                     progressDialog.show();
                 }
-            });
+            };
+        }
+
+        if (isMainThread()) {
+            showRunnable.run();
+        } else {
+            getMainHandler().post(showRunnable);
         }
     }
 
@@ -112,9 +121,13 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public Handler getMainHandler() {
+    public final Handler getMainHandler() {
         if (handler == null)
             handler = new Handler(Looper.getMainLooper());
         return handler;
+    }
+
+    public final boolean isMainThread() {
+        return Looper.myLooper() == Looper.getMainLooper();
     }
 }
