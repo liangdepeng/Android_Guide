@@ -1,0 +1,33 @@
+https://www.jianshu.com/p/857aea5b54a8  路由
+
+https://www.jianshu.com/p/d9516884dbd4 EventBus
+
+https://www.jianshu.com/p/768b2c2ab9e4 Retrofit
+
+https://www.jianshu.com/p/d7eced552553 okhttp
+
+https://www.jianshu.com/p/d52ef3ad7460 RxJava
+
+https://www.jianshu.com/p/4d341576bc95 Glide
+
+
+
+https://zhuanlan.zhihu.com/p/43789231 https 加密
+
+// volatile  
+ https://www.cnblogs.com/zhengbin/p/5654805.html
+ 当变量定义为 volatile 之后，将具备两种特性：
+　　1. 保证此变量对所有的线程的可见性，这里的“可见性”，如本文开头所述，当一个线程修改了这个变量的值，
+        volatile 保证了新值能立即同步到主内存，以及每次使用前立即从主内存刷新。但普通变量做不到这点，
+       普通变量的值在线程间传递均需要通过主内存（详见：Java内存模型）来完成。
+
+　　2. 禁止指令重排序优化。有volatile修饰的变量，赋值后多执行了一个“load addl $0x0, (%esp)”操作，
+      这个操作相当于一个内存屏障（指令重排序时不能把后面的指令重排序到内存屏障之前的位置），
+
+只有一个CPU访问内存时，并不需要内存屏障）。
+
+volatile 性能：
+　　volatile 的读性能消耗与普通变量几乎相同，但是写操作稍慢，因为它需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。
+
+
+

@@ -64,6 +64,8 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (handler != null)
+            handler.removeCallbacksAndMessages(null);
         Log.e(tag, "--onDestroy-- " + getClass().getSimpleName());
     }
 
