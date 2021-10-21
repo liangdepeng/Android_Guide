@@ -77,7 +77,7 @@ fun Any.snackToast(context: Context?, callback: Snackbar.Callback? = null) = run
             this.toString(),
             Snackbar.LENGTH_SHORT
         ).apply {
-                setTextColor(Color.BLACK)
+                setTextColor(Color.WHITE)
                 setBackgroundTint(Color.parseColor("#ff8000"))
                 addCallback(callback)
             }.show()

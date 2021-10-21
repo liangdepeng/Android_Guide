@@ -15,8 +15,13 @@ class KotlinXCActivity : BaseActivity() {
 
     private val TAG = "kotlinXc"
 
+    // 模拟业务model1
     private val viewModel by lazy {
         ViewModelProvider(this).get(KotlinXcViewModel::class.java)
+    }
+    // 模拟业务model2
+    private val viewModel2 by lazy {
+        ViewModelProvider(this).get(KotlinXcViewModel2::class.java)
     }
 
     private val binding by lazy {
@@ -43,6 +48,15 @@ class KotlinXCActivity : BaseActivity() {
         binding.getData.setOnClickListener {
             viewModel.requestData()
         }
+
+        viewModel2.resultData.observe(this,{
+            it?.snackToast(this)
+        })
+
+        binding.getData2.setOnClickListener {
+            viewModel2.requestDataTwo()
+        }
+
     }
 
     private fun notBlockXC() {
