@@ -16,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
-import com.bumptech.glide.R;
 import com.bumptech.glide.request.Request;
 import com.bumptech.glide.util.Preconditions;
 import com.bumptech.glide.util.Synthetic;
@@ -52,7 +51,7 @@ import java.util.List;
 public abstract class ViewTarget<T extends View, Z> extends BaseTarget<Z> {
   private static final String TAG = "ViewTarget";
   private static boolean isTagUsedAtLeastOnce;
-  private static int tagId = R.id.glide_custom_view_target_tag;
+  private static int tagId = 12332112;
 
   protected final T view;
   private final SizeDeterminer sizeDeterminer;

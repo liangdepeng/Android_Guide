@@ -158,7 +158,18 @@ ext {
             // ，提供了 Android WebView 一系列的问题解决方案 ，并且轻量和极度灵活
             agentweb                  : 'com.just.agentweb:agentweb-androidx:4.1.4', // (必选)
             filechooser               : 'com.just.agentweb:filechooser-androidx:4.1.4',// (可选)
-            downloader                : 'com.download.library:downloader-androidx:4.1.4'// (可选)
+            downloader                : 'com.download.library:downloader-androidx:4.1.4',// (可选)
+
+            //lifecycle
+
+            "lifecycle_compiler"           : "androidx.lifecycle:lifecycle-compiler:2.2.0",
+
+            "lifecycle_viewmodel"          : "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0",
+            "lifecycle_livedata"           : "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0",
+            //LifecycleScope
+            "lifecycle_runtime"            : "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0",
+            //前后台判断
+            "lifecycle_process"            : "androidx.lifecycle:lifecycle-process:2.3.0"
 
     ]
 

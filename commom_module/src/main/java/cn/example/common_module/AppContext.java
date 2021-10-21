@@ -2,6 +2,9 @@ package cn.example.common_module;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.Toast;
 
 /**
  * Created by ldp.
@@ -21,5 +24,12 @@ public class AppContext {
 
     public static Context getAppContext() {
         return context;
+    }
+
+
+    public final static Handler HANDLER = new Handler(Looper.getMainLooper());
+
+    public static Toast getGlobalToast() {
+        return Toast.makeText(context, "", Toast.LENGTH_SHORT);
     }
 }

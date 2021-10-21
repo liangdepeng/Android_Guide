@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -18,6 +19,7 @@ import com.example.myapplication.base.ClassBean
 import com.example.myapplication.camera.CameraActivity
 import com.example.myapplication.database.DataBaseActivity
 import com.example.myapplication.databinding.ActivityMainBinding
+import com.example.myapplication.kotlin.KotlinXCActivity
 import com.example.myapplication.life.LifeActivity
 import com.example.myapplication.service.ServiceActivity
 import com.example.myapplication.socket.SocketClientActivity
@@ -50,9 +52,12 @@ class MainActivity : AppCompatActivity() {
         }, ClassBean().apply {
             aClass = SocketClientActivity::class.java
             classInfo = "Socket"
-        },ClassBean().apply {
-            aClass= CameraActivity::class.java
+        }, ClassBean().apply {
+            aClass = CameraActivity::class.java
             classInfo = "camera"
+        }, ClassBean().apply {
+            aClass = KotlinXCActivity::class.java
+            classInfo = "协程+ViewModel"
         })
 
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
@@ -88,6 +93,7 @@ class MainActivity : AppCompatActivity() {
             this.listener = listener
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         fun setList(data: ArrayList<ClassBean>?) {
             list.clear()
             list.addAll(data ?: emptyList())

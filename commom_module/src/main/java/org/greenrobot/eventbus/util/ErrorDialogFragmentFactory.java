@@ -19,7 +19,8 @@ package org.greenrobot.eventbus.util;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * Factory to allow injecting a more complex exception mapping; typically you would subclass one of {@link Honeycomb} or
@@ -89,6 +90,7 @@ public abstract class ErrorDialogFragmentFactory<T> {
             super(config);
         }
 
+        @Override
         protected Fragment createErrorFragment(ThrowableFailureEvent event, Bundle arguments) {
             ErrorDialogFragments.Support errorFragment = new ErrorDialogFragments.Support();
             errorFragment.setArguments(arguments);
@@ -98,13 +100,14 @@ public abstract class ErrorDialogFragmentFactory<T> {
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class Honeycomb extends ErrorDialogFragmentFactory<android.app.Fragment> {
+    public static class Honeycomb extends ErrorDialogFragmentFactory<Fragment> {
 
         public Honeycomb(ErrorDialogConfig config) {
             super(config);
         }
 
-        protected android.app.Fragment createErrorFragment(ThrowableFailureEvent event, Bundle arguments) {
+        @Override
+        protected Fragment createErrorFragment(ThrowableFailureEvent event, Bundle arguments) {
             ErrorDialogFragments.Honeycomb errorFragment = new ErrorDialogFragments.Honeycomb();
             errorFragment.setArguments(arguments);
             return errorFragment;

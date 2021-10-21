@@ -16,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
-import com.bumptech.glide.R;
 import com.bumptech.glide.request.Request;
 import com.bumptech.glide.request.transition.Transition;
 import com.bumptech.glide.util.Preconditions;
@@ -37,7 +36,7 @@ import java.util.List;
  */
 public abstract class CustomViewTarget<T extends View, Z> implements Target<Z> {
   private static final String TAG = "CustomViewTarget";
-  @IdRes private static final int VIEW_TAG_ID = R.id.glide_custom_view_target_tag;
+  @IdRes private static final int VIEW_TAG_ID = 12332112;
 
   private final SizeDeterminer sizeDeterminer;
 

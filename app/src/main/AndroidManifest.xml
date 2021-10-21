@@ -3,7 +3,7 @@
     package="com.example.myapplication">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".MyApplication"
@@ -14,12 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
-            android:name=".camera.CameraActivity"
-            android:launchMode="singleTask"
-            android:exported="true" />
+            android:name=".kotlin.KotlinXCActivity" />
         <activity
-            android:name=".socket.SocketClientActivity"
-            android:exported="true" />
+            android:name=".camera.CameraActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".socket.SocketClientActivity" />
         <activity
             android:name=".database.DataBaseActivity"
             android:label="数据库"
