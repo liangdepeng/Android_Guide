@@ -1,0 +1,76 @@
+https://www.jianshu.com/p/857aea5b54a8  路由
+
+https://www.jianshu.com/p/d9516884dbd4 EventBus
+
+https://www.jianshu.com/p/768b2c2ab9e4 Retrofit
+
+https://www.jianshu.com/p/d7eced552553 okhttp
+https://blog.csdn.net/weixin_39069034/article/details/114687185
+OKHttp3通过拦截链的设计，让请求分成5个拦截器去处理，拦截器各司其职，扩展性非常高。
+拦截链是从自定义的拦截器开始，然后再到默认的5个拦截器。一般情况下我们想打印网络请求日志，
+所以可以自定义Log拦截器，如果要给所有请求添加Header，同样可以自定义Header拦截器。
+
+1.失败重试、重定向拦截器。
+2.桥拦截器：主要是添加和删除一些header
+3.缓存拦截器：根据缓存策略，如果缓存可用，直接返回缓存数据。
+4.连接池拦截器：连接池会缓存http链接，连接池的好处是复用连接，少了3次握手，所以请求会更快
+5.真正访问网络的拦截器：内部使用okio去发请求
+
+https://www.jianshu.com/p/d52ef3ad7460 RxJava
+
+https://www.jianshu.com/p/4d341576bc95 Glide
+
+
+
+https://zhuanlan.zhihu.com/p/43789231 https加密
+
+// volatile  
+ https://www.cnblogs.com/zhengbin/p/5654805.html
+ 当变量定义为 volatile 之后，将具备两种特性：
+　　1. 保证此变量对所有的线程的可见性，这里的“可见性”，如本文开头所述，当一个线程修改了这个变量的值，
+        volatile 保证了新值能立即同步到主内存，以及每次使用前立即从主内存刷新。但普通变量做不到这点，
+       普通变量的值在线程间传递均需要通过主内存（详见：Java内存模型）来完成。
+
+　　2. 禁止指令重排序优化。有volatile修饰的变量，赋值后多执行了一个“load addl $0x0, (%esp)”操作，
+      这个操作相当于一个内存屏障（指令重排序时不能把后面的指令重排序到内存屏障之前的位置），
+
+只有一个CPU访问内存时，并不需要内存屏障）。
+
+volatile 性能：
+　　volatile 的读性能消耗与普通变量几乎相同，但是写操作稍慢，因为它需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。
+
+Java 类加载过程？
+描述一下JVM 加载 Class文件的原理机制？
+Java 内存分配
+GC 是什么? 为什么要有GC？
+如何判断一个对象是否存活？（或者 GC 对象的判定方法）
+垃圾回收的优点和原理。并考虑 2 种回收机制
+垃圾回收器的基本原理是什么？垃圾回收器可以马上回收内存吗？有什么办法主动通知虚拟机进行垃圾回收？
+Java 中会存在内存泄漏吗，请简单描述
+
+说下Activity的生命周期？
+onStart()和onResume()/onPause()和onStop()的区别？
+Activity A启动另一个Activity B会回调哪些方法？如果Activity B是完全透明呢？如果启动的是一个Dialog呢？
+谈谈onSaveInstanceState()方法？何时会调用？
+onSaveInstanceState()与onPause()的区别？
+如何避免配置改变时Activity重建？
+优先级低的Activity在内存不足被回收后怎样做可以恢复到销毁前状态？
+说下Activity的四种启动模式？（有时会出个实际问题来分析返回栈中Activity的情况）
+谈谈singleTop和singleTask的区别以及应用场景
+
+Binder的定向制导，如何找到目标Binder，唤起进程或者线程
+Binder中的红黑树，为什么会有两棵binder_ref红黑树
+Binder一次拷贝原理
+Binder线程、Binder主线程、Client请求线程的概念与区别
+Binder线程的睡眠与唤醒（请求线程睡在哪个等待队列上，唤醒目标端哪个队列上的线程）
+Binder协议中BC与BR的区别
+Binder在传输数据的时候是如何层层封装的–不同层次使用的数据结构（命令的封装）
+Binder驱动传递数据的释放（释放时机）
+一个简单的Binder通信C/S模型
+
+请说一下RecyclerView？adapter的作用是什么，几个方法是做什么用的？如何理解adapter订阅者模式？
+RecyclerView绘制原理如何理解？性能优化本质是什么？RecyclerView绘制原理过程大概是怎样的？
+RecyclerView常见的优化有哪些？实际开发中都是怎么做的，优化前后对比性能上有何提升？
+如何解决RecyclerView嵌套RecyclerView条目自动上滚的Bug？如何解决ScrollView嵌套RecyclerView滑动冲突？
+RecyclerView的Recyler是如何实现ViewHolder的缓存？如何理解RecyclerView三级缓存是如何实现的？
+RecyclerView源码分析

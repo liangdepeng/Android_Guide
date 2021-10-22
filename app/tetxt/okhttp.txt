@@ -1,0 +1,37 @@
+1、先创建okhttpClient对象
+2、然后构建Request请求对象 get，post
+3、然后使用okhttpClient生成  RealCall对象 okhttpClient.newCall
+4、同步Response response= call.execute()
+      异步 call.enqueue(callback成功失败回调)
+
+请求核心方法 getResponseWithInterceptorChain
+
+1、用户自定义拦截器
+2、1. RetryAndFollowUpInterceptor  失败重试/重定向拦截器 
+      2. BridgeInterceptor  桥接应用层与网络层，添加必要的header
+      3. CacheInterceptor 缓存拦截器 处理缓存相关的请求头 是否有必要直接使用缓存
+      4. ConnectionInterceptor 获得一个安全有效的连接
+      5. CallServerInterceptior 真正请求网络的拦截器
+
+client.dispatcher
+
+ 定义了三个双向任务队列，
+两个异步队列：准备执行的请求队列 readyAsyncCalls、正在运行的请求队列 runningAsyncCalls；
+一个正在运行的同步请求队列 runningSyncCalls；
+
+另外还有一个线程池 executorService
+
+
+
+同步方法
+    try {
+      client.dispatcher.executed(this)
+      return getResponseWithInterceptorChain()
+    } finally {
+      client.dispatcher.finished(this)
+    }
+  }
+异步方法
+{
+    client.dispatcher.enqueue(AsyncCall(responseCallback))
+  }

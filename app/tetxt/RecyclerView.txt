@@ -1,0 +1,6 @@
+优化：
+1、降低item的布局层次
+2、去除冗余的setitemclick事件 频繁创建对象
+3、复用pool缓存
+4、视情况设置itemanimator动画
+5、setHasFixedSize，主要作用就是设置固定高度的rv，避免rv重复measure调用。这个方法可以配合rv的wrap_content属性来使用

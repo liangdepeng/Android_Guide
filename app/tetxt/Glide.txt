@@ -1,0 +1,159 @@
+Glide.with(content)
+     .load(url)
+     .into(imageView);
+with绑定生命周期，load指定加载资源，into指明加载目标
+
+就是将 Gif 解码成多张图片进行无限轮播，每帧切换都是一次图片加载请求，
+再加载到新的一帧数据之后会对旧的一帧数据进行清除，然后再继续下一帧数据的加载请求，
+以此类推，使用 Handler 发送消息实现循环播放。
+
+https://www.cnblogs.com/billshen/p/13306285.html
+
+DiskCacheStrategy.NONE 不缓存文件
+DiskCacheStrategy.SOURCE 只缓存原图
+DiskCacheStrategy.RESULT 只缓存最终加载的图（默认的缓存略）
+DiskCacheStrategy.ALL 同时缓存原图和结果图
+
+//with返回一个RequestManager
+public static RequestManager with(Activity activity) {
+    return getRetriever(activity).get(activity);
+}
+//无论调用的是哪个with重载方法，最后都会到这里
+public RequestManager get(Activity activity) {
+    if (Util.isOnBackgroundThread()) {
+        return get(activity.getApplicationContext());
+    } else {
+        assertNotDestroyed(activity);
+        android.app.FragmentManager fm = activity.getFragmentManager();
+        return fragmentGet(activity, fm, null);
+    }
+}
+
+//这里新建了一个没有视图的RequestManagerFragment 
+private RequestManager fragmentGet(Context context,
+                                   android.app.FragmentManager fm,
+                                   android.app.Fragment parentHint) {
+    RequestManagerFragment current = getRequestManagerFragment(fm, parentHint);
+    RequestManager requestManager = current.getRequestManager();
+    if (requestManager == null) {
+        Glide glide = Glide.get(context);
+　　　　 //绑定requestManager和Fragment的Lifecycle
+        requestManager =
+                factory.build( ？、 Lifecycle
+                        glide, current.getGlideLifecycle(), current.getRequestManagerTreeNode(), context);
+        current.setRequestManager(requestManager);
+    }
+    return requestManager;
+}
+
+  private RequestManagerFragment getRequestManagerFragment(
+      @NonNull final android.app.FragmentManager fm, @Nullable android.app.Fragment parentHint) {
+    RequestManagerFragment current = (RequestManagerFragment) fm.findFragmentByTag(FRAGMENT_TAG);
+    if (current == null) {
+      current = pendingRequestManagerFragments.get(fm);
+      if (current == null) {
+        current = new RequestManagerFragment(); 、、持有Lifecycle
+        current.setParentFragmentHint(parentHint);
+        pendingRequestManagerFragments.put(fm, current);
+        fm.beginTransaction().add(current, FRAGMENT_TAG).commitAllowingStateLoss();
+        handler.obtainMessage(ID_REMOVE_FRAGMENT_MANAGER, fm).sendToTarget();
+      }
+    }
+    return current;
+  }
+
+    ---------缓存------------
+
+  private EngineResource<?> loadFromMemory(
+      EngineKey key, boolean isMemoryCacheable, long startTime) {
+    if (!isMemoryCacheable) {
+      return null;
+    }
+
+    EngineResource<?> active = loadFromActiveResources(key);
+
+  @Nullable
+  private EngineResource<?> loadFromActiveResources(Key key) {
+    EngineResource<?> active = activeResources.get(key);
+    if (active != null) {
+      active.acquire();
+    }
+
+    return active;
+  }
+
+    EngineResource<?> cached = loadFromCache(key);
+  private EngineResource<?> loadFromCache(Key key) {
+    EngineResource<?> cached = getEngineResourceFromCache(key);
+    if (cached != null) {
+      cached.acquire();
+      activeResources.activate(key, cached);
+    }
+    return cached;
+  }
+
+}
+
+一.glide缓存分为：内存缓存和硬盘缓存
+
+二.在load方法中可以看出先调用内存缓存在加载图片，内存缓存找不到在调用硬盘缓存中加载图片
+
+三.内存缓存
+
+1.缓存key：决定缓存key的参数有十几个(包括url，宽，高，signature等等)
+
+EngineKey key = keyFactory.buildKey(id, signature, width, height, loadProvider.getCacheDecoder(),
+                loadProvider.getSourceDecoder(), transformation, loadProvider.getEncoder(),
+                transcoder, loadProvider.getSourceEncoder());
+
+注意：android 4.4以前是Bitmap复用必须长宽相等才可以复用，而android 4.4及以后是Size>=所需就可以复用，
+只不过需要调用reconfigure来调整尺寸
+
+2.默认是开启内存缓存的，可以调用skipMemoryCache(true)关闭缓存
+
+3.内存缓存原理
+
+①.缓存算法：算法是lru算法（当前看不见的图片，用LinkHashMap来存储的）+弱引用算法（当前正在显示的图片，
+用HashMap来存储的）
+
+②.两个缓存区域：LruResourceCache(lru算法存储区域)+activeResources(弱引用算法存储区域)
+
+③.优先级：LruResourceCache>activeResources
+
+④.查找顺序：先从LruResourceCache中查找，找到了移除并添加到activeResources中，找不到再从activeResources中查找。
+
+⑤.引用计数acquired:acquired()方法让其+1，release()方法让其-1，经过acquired()方法使acquired>0在activeResources中
+存储，然后不再使用调用release()方法使acquired==0被activeResources移除并且put到LruResourceCache中
+
+⑥.onEngineJobComplete先加载到activeResources中
+
+四.硬盘缓存
+
+1.缓存模式：
+
+3.x 
+
+DiskCacheStrategy.NONE： 表示不缓存任何内容。
+DiskCacheStrategy.SOURCE： 表示只缓存原始图片。
+DiskCacheStrategy.RESULT： 表示只缓存转换过后的图片（默认选项）。
+DiskCacheStrategy.ALL ： 表示既缓存原始图片，也缓存转换过后的图片。
+
+4.x
+
+DiskCacheStrategy.NONE： 表示不缓存任何内容。
+DiskCacheStrategy.DATA： 表示只缓存原始图片。对应上面的DiskCacheStrategy.SOURCE
+DiskCacheStrategy.RESOURCE： 表示只缓存转换过后的图片。对应上面的DiskCacheStrategy.RESULT
+DiskCacheStrategy.ALL ： 表示既缓存原始图片，也缓存转换过后的图片。
+DiskCacheStrategy.AUTOMATIC： 表示让Glide根据图片资源智能地选择使用哪一种缓存策略（默认选项）
+
+2.硬盘缓存原理3.x：
+
+①.默认情况先从decodeFromCache()硬盘缓存读取，如果没有读取到则从decodeFromSource()读取原始图片
+
+②.decodeFromCache方法中先调用decodeResultFromCache方法就是对应的DiskCacheStrategy.RESULT模式加载图片，
+如果获取不到，会再调用decodeSourceFromCache()方法获取缓存，对应的是DiskCacheStrategy.SOURCE模式，
+注意此处decodeResultFromCache方法中的key是和内存缓存一致的，由十几个参数组成的，
+decodeSourceFromCache的key是由id和signature这两个参数来构成，大多数情况下signature是一致的可以忽略，
+所以是由url决定的key。
+
+③.decodeFromSource()读取原始图片后根据判断来进行是否进行硬盘缓存。

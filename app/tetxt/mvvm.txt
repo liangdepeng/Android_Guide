@@ -1,0 +1,24 @@
+mvvm
+
+通过ViewModelProvider持有owner.getViewModelStore()和Factory，并主要用来获取对应的ViewModelStore
+ViewModelStore存储了hashmap形势的类与ViewModel的对应，Factory负责在需要时创建出ViewModel
+ViewModelStore被Activity或Fragment持有，AMS 调用onRetainNonConfigurationInstance 实现数据保存 以便横竖屏切换数据持久化
+Activity因配置原因销毁-重建时，ViewModelStore被NonConfigurationInstances保存
+数据共享实现 ViewModelProvider（ViewModelStoreOwner owner（为activity即可共享）,  Factory factory）
+再此需求时从从保存处恢复。
+
+// ondestroy 被销毁
+ getLifecycle().addObserver(new LifecycleEventObserver() {
+       @Override
+       public void onStateChanged(@NonNull LifecycleOwner source,
+                    @NonNull Lifecycle.Event event) {
+                if (event == Lifecycle.Event.ON_DESTROY) {
+                    // Clear out the available context
+                    mContextAwareHelper.clearAvailableContext();
+                    // And clear the ViewModelStore
+                    if (!isChangingConfigurations()) {
+                        getViewModelStore().clear();
+                    }
+                }
+            }
+        });
