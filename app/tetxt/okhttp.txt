@@ -21,8 +21,6 @@ client.dispatcher
 
 另外还有一个线程池 executorService
 
-
-
 同步方法
     try {
       client.dispatcher.executed(this)

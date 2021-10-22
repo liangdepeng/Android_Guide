@@ -29,7 +29,7 @@ public RequestManager get(Activity activity) {
     }
 }
 
-//这里新建了一个没有视图的RequestManagerFragment 
+//---------这里新建了一个没有视图的RequestManagerFragment------------
 private RequestManager fragmentGet(Context context,
                                    android.app.FragmentManager fm,
                                    android.app.Fragment parentHint) {
@@ -37,7 +37,7 @@ private RequestManager fragmentGet(Context context,
     RequestManager requestManager = current.getRequestManager();
     if (requestManager == null) {
         Glide glide = Glide.get(context);
-　　　　 //绑定requestManager和Fragment的Lifecycle
+　　　　 //---------绑定requestManager和Fragment的Lifecycle----------
         requestManager =
                 factory.build( ？、 Lifecycle
                         glide, current.getGlideLifecycle(), current.getRequestManagerTreeNode(), context);
