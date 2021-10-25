@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.os.Looper
-import android.view.Gravity
 import android.widget.TextView
 import android.widget.Toast
 import cn.example.common_module.AppContext
@@ -42,25 +41,10 @@ val Any.isOnMainThread: Boolean
 
 // 简易Toast 任何对象都可以  任何Kotlin类均可用
 fun Any.simpleToast() = run {
-    val globalToast = AppContext.getGlobalToast()
     val runnable = Runnable {
+        val globalToast = Toast.makeText(AppContext.getAppContext(), "", Toast.LENGTH_SHORT)
         globalToast.setText(toString())
         globalToast.show()
-    }
-    if (isOnMainThread) {
-        runnable.run()
-    } else {
-        AppContext.HANDLER.post(runnable)
-    }
-}
-
-// 简易Toast 任何对象都可以  任何Kotlin类均可用
-fun Any.simpleContextToast(context: Context) = run {
-    val runnable = Runnable {
-        Toast.makeText(context, toString(), Toast.LENGTH_SHORT).apply {
-            setGravity(Gravity.CENTER, 0, 0)
-            setText(this@run.toString())
-        }.also { it.show() }
     }
     if (isOnMainThread) {
         runnable.run()
@@ -77,10 +61,10 @@ fun Any.snackToast(context: Context?, callback: Snackbar.Callback? = null) = run
             this.toString(),
             Snackbar.LENGTH_SHORT
         ).apply {
-                setTextColor(Color.WHITE)
-                setBackgroundTint(Color.parseColor("#ff8000"))
-                addCallback(callback)
-            }.show()
+            setTextColor(Color.WHITE)
+            setBackgroundTint(Color.parseColor("#ff8000"))
+            addCallback(callback)
+        }.show()
     } else {
         simpleToast()
     }

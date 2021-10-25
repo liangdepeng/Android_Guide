@@ -19,6 +19,7 @@ import com.example.myapplication.base.ClassBean
 import com.example.myapplication.camera.CameraActivity
 import com.example.myapplication.database.DataBaseActivity
 import com.example.myapplication.databinding.ActivityMainBinding
+import com.example.myapplication.down.DownloadActivity
 import com.example.myapplication.kotlin.KotlinXCActivity
 import com.example.myapplication.life.LifeActivity
 import com.example.myapplication.service.ServiceActivity
@@ -58,6 +59,9 @@ class MainActivity : AppCompatActivity() {
         }, ClassBean().apply {
             aClass = KotlinXCActivity::class.java
             classInfo = "协程+ViewModel"
+        }, ClassBean().apply {
+            aClass = DownloadActivity::class.java
+            classInfo = "下载测试"
         })
 
         binding.recyclerview.layoutManager = LinearLayoutManager(this)

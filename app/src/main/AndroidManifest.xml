@@ -4,22 +4,27 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
+        android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
-            android:name=".kotlin.KotlinXCActivity" />
+            android:name=".down.DownloadActivity"
+            android:exported="true" />
+        <activity android:name=".kotlin.KotlinXCActivity" />
         <activity
             android:name=".camera.CameraActivity"
             android:launchMode="singleTask" />
-        <activity
-            android:name=".socket.SocketClientActivity" />
+        <activity android:name=".socket.SocketClientActivity" />
         <activity
             android:name=".database.DataBaseActivity"
             android:label="数据库"
