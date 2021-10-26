@@ -29,10 +29,8 @@ public class FileUtil {
     private String path;
     private final String tag = "FFFFFFF";
 
-    /**
-     * @throws Exception
-     */
     public FileUtil() throws Exception {
+        // 初始化文件夹存放路径
         path = getStorePath();
         File file = new File(path);
         if (!file.exists()) {
@@ -41,13 +39,16 @@ public class FileUtil {
         }
     }
 
+    /**
+     * 获取存储路径
+     */
     private String getStorePath() throws Exception {
-        // 存储媒体已经挂载，并且挂载点可读/写
+        // 存储媒体sd卡已经挂载，并且挂载点可读/写 注意6.0以上申请动态权限
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
             throw new Exception("SD卡异常");
 
         if (Build.VERSION.SDK_INT >= 29) {
-            // 沙盒存储
+            // 沙盒存储 位于app包内部 外部不可见
             return AppContext.getAppContext().getExternalFilesDir(Environment.DIRECTORY_MOVIES).toString() + "/aaatestfill";
         }
 
@@ -55,6 +56,11 @@ public class FileUtil {
         return Environment.getExternalStorageDirectory().toString() + "/aaatestfile";
     }
 
+    /**
+     * 创建文件 在生成的文件夹下
+     * @param fileName
+     * @return
+     */
     public File createFile(String fileName) {
         if (fileName == null || "".equals(fileName))
             throw new IllegalArgumentException("文件名不能为空");
@@ -62,52 +68,11 @@ public class FileUtil {
     }
 
     /**
-     * @param file              要复制的文件
-     * @param toFilePath        复制到的文件夹路径 不包括文件名
-     * @param toFileAllPathName 复制到的文件路径 包括文件名
-     * @return 是否成功
-     */
-    public boolean copyFile(File file, String toFilePath, String toFileAllPathName) {
-        if (!file.exists()) {
-            Log.e(tag, "文件不存在");
-            return false;
-        }
-        // 复制的文件夹是否存在
-        File dirs = new File(toFilePath);
-        if (!dirs.exists()) {
-            dirs.mkdirs();
-        }
-        // 输入输出流
-        FileOutputStream outputStream;
-        FileInputStream inputStream;
-        try {
-            // 输出文件 写入输出流
-            outputStream = new FileOutputStream(toFileAllPathName);
-            // 要复制的文件写入输入流
-            inputStream = new FileInputStream(file);
-
-            byte[] bytes = new byte[1024];
-            int len = 0;
-            // 每次读取1024字节
-            while ((len = inputStream.read()) != -1) {
-                outputStream.write(bytes, 0, len);
-            }
-            inputStream.close();
-            outputStream.flush();
-            return true;
-        } catch (Exception e) {
-            KtExpandUtil.Companion.showToast(e.getMessage());
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    /**
      * Android Q 开始android不允许直接访问外部存储 每个应用会有沙盒机制存储
      *
      * @param file 手动复制文件插入媒体库 使用ContentProvider
      */
-    public void copyFileToSdCard(File file) {
+    public void copyFileToSdCardForAndroidQ(File file) {
         try {
             // 构建要插入的数据
             ContentValues contentValues = new ContentValues();
@@ -154,6 +119,47 @@ public class FileUtil {
             KtExpandUtil.Companion.showToast(e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    /**
+     * @param file              要复制的文件
+     * @param toFilePath        复制到的文件夹路径 不包括文件名
+     * @param toFileAllPathName 复制到的文件路径 包括文件名
+     * @return 是否成功
+     */
+    public boolean copyFile(File file, String toFilePath, String toFileAllPathName) {
+        if (!file.exists()) {
+            Log.e(tag, "文件不存在");
+            return false;
+        }
+        // 复制的文件夹是否存在
+        File dirs = new File(toFilePath);
+        if (!dirs.exists()) {
+            dirs.mkdirs();
+        }
+        // 输入输出流
+        FileOutputStream outputStream;
+        FileInputStream inputStream;
+        try {
+            // 输出文件 写入输出流
+            outputStream = new FileOutputStream(toFileAllPathName);
+            // 要复制的文件写入输入流
+            inputStream = new FileInputStream(file);
+
+            byte[] bytes = new byte[1024];
+            int len = 0;
+            // 每次读取1024字节
+            while ((len = inputStream.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, len);
+            }
+            inputStream.close();
+            outputStream.flush();
+            return true;
+        } catch (Exception e) {
+            KtExpandUtil.Companion.showToast(e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
     }
 
 
