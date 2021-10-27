@@ -30,9 +30,9 @@ public class OkHttpTest {
     // 同步请求
     public void syncGet() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-//                .addInterceptor()
-//                .addNetworkInterceptor()
-//                .connectTimeout()
+                //                .addInterceptor()
+                //                .addNetworkInterceptor()
+                //                .connectTimeout()
                 .build();
         Request request = new Request.Builder()
                 .url("http://www.baidu.com")
