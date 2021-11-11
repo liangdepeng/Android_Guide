@@ -61,6 +61,7 @@ public class MultiThreadManager {
 
     public MultiThreadManager() {
         runnables = new ArrayList<>();
+        this.downloadDao = new DownloadDao();
         executor = new ThreadPoolExecutor(0, 10, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), Executors.defaultThreadFactory(), new ThreadPoolExecutor.AbortPolicy());
     }
 
@@ -68,7 +69,6 @@ public class MultiThreadManager {
         KtExpandUtil.Companion.showToast("下载开始");
         this.listener = listener;
         this.downloadUrl = objUrl;
-        this.downloadDao = new DownloadDao();
         Runnable runnable = () -> {
             try {
                 URL url = new URL(downloadUrl);

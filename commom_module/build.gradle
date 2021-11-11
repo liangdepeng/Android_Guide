@@ -10,7 +10,7 @@ uploadArchives{
         repository(url: uri('../repository'))
         pom.groupId = "com.example.ldp.common"// 唯一标识（通常为模块包名，也可以任意）
         pom.artifactId = "comlib" // 项目名称（通常为类库模块名称，也可以任意）
-        pom.version = "1.0.0" // 版本号
+        pom.version = "1.0.1" // 版本号
     }
 }
 
@@ -72,6 +72,19 @@ dependencies {
 
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.9.0'
     implementation 'io.reactivex:rxandroid:1.2.1'
+
+//    // app build.gradle依赖
+//    api 'com.google.dagger:dagger:2.4'
+//    annotationProcessor 'com.google.dagger:dagger-compiler:2.4'
+//
+//    api 'com.android.support:support-annotations:21.0.2'
+//
+//    // 这是Google对注解处理器所提供的服务，目的是为了生成注解配置，并 可以生成java文件代码等
+//    compileOnly 'com.google.auto.service:auto-service:1.0-rc4'
+//    annotationProcessor 'com.google.auto.service:auto-service:1.0-rc4'
+
+    // 此JavaPoet可以去生成Java文件  以面向对象的思维，生成代码
+    api 'com.squareup:javapoet:1.9.0'
 }
 
 repositories {

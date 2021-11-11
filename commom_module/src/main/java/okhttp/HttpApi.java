@@ -2,6 +2,7 @@ package okhttp;
 
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
@@ -32,9 +33,12 @@ public interface HttpApi {
     @GET("/test/{userid}/123213")
     Call<Object> getTest(@Path("userid") String userid);
 
-    @Streaming // 下载大文件
     @GET("test/test/tesdsad")
     Call<Object> getTest2(@Query("userid") String userid, @Query("name") String name);
+
+    @Streaming // 下载文件 大文件要加 否则OOM
+    @GET
+    Call<ResponseBody> get(@Url String url);
 
     @GET("test/test")
     Call<Object> getTest(@QueryMap Map<String, String> paramsMap);
