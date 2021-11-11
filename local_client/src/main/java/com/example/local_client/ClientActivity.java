@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.local_server.IAidlCallback;
 import com.example.local_server.IMyAidlInterface;
 
-import toast.ToastUtil;
+import abc.common.util.KtExpandUtil;
 
 
 /**
@@ -46,7 +46,8 @@ public class ClientActivity extends AppCompatActivity{
                 aidlCallback = new IAidlCallback.Stub() {
                     @Override
                     public void testCallback(String msg) throws RemoteException {
-                        ToastUtil.show(msg);
+//                        ToastUtil.show(msg);
+                        KtExpandUtil.Companion.showToast(msg);
                     }
 
                     @Override
@@ -101,7 +102,8 @@ public class ClientActivity extends AppCompatActivity{
             public void onClick(View v) {
                 String in = editText.getText().toString().trim();
                 if (TextUtils.isEmpty(in)) {
-                    ToastUtil.show("不能为空");
+                    //ToastUtil.show("不能为空");
+                    KtExpandUtil.Companion.showToast("不能为空");
                     return;
                 }
                 try {

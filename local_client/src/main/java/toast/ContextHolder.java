@@ -47,6 +47,6 @@ public class ContextHolder {
     }
 
     private static class Instance {
-        private final static ContextHolder INSTANCE = new ContextHolder();
+        public final static ContextHolder INSTANCE = new ContextHolder();
     }
 }

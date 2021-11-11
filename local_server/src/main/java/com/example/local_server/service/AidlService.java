@@ -63,7 +63,7 @@ public class AidlService extends Service {
 
     static class MyIBinder extends IMyAidlInterface.Stub{
 
-        private final AidlService aidlService;
+        private AidlService aidlService;
 
         public MyIBinder(AidlService aidlService) {
             this.aidlService=aidlService;
