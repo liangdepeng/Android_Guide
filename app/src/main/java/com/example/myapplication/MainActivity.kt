@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.module_play.PlayTestActivity
+import com.example.myapplication.aalib.LottieActivity
 import com.example.myapplication.base.ClassBean
 import com.example.myapplication.camera.CameraActivity
 import com.example.myapplication.database.DataBaseActivity
@@ -62,6 +63,9 @@ class MainActivity : AppCompatActivity() {
         }, ClassBean().apply {
             aClass = DownloadActivity::class.java
             classInfo = "下载测试"
+        }, ClassBean().apply {
+            aClass = LottieActivity::class.java
+            classInfo = "Lottie动画"
         })
 
         binding.recyclerview.layoutManager = LinearLayoutManager(this)

@@ -1,6 +1,7 @@
 package com.example.down_module;
 
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 
 import com.example.down_module.util.DownloadDao;
@@ -50,7 +51,7 @@ public class MultiThreadManager {
     private File file;
     // 缓存每个线程的下载长度
     private Map<Integer, Integer> data = new ConcurrentHashMap<>();
-    // 每个人线程的下载长度
+    // 每个线程的下载长度
     private int block;
     // 下载路径
     private String downloadUrl;
@@ -98,7 +99,7 @@ public class MultiThreadManager {
                     String fileName = getFileName(connection);
                     // 保存文件
 
-                    FileUtil fileUtil = new FileUtil();
+                    FileUtil fileUtil = new FileUtil(Environment.DIRECTORY_MOVIES);
                     file = fileUtil.createFile(fileName);
 
                     HashMap<Integer, Integer> map = downloadDao.getDownloadProgressData(downloadUrl);

@@ -17,6 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         android:usesCleartextTraffic="true">
+
+        <activity
+            android:name=".aalib.LottieActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".dagger.DaggerActivity"
             android:exported="true" />

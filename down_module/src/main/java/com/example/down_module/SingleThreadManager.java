@@ -1,6 +1,7 @@
 package com.example.down_module;
 
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -63,7 +64,7 @@ public class SingleThreadManager {
                     // 截取文件名类型 .mp3/.mp4/.flv 等等
                     String fileName = System.currentTimeMillis() + "_" + url.substring(url.lastIndexOf("/") + 1);
                     // 获取文件名
-                    FileUtil fileUtil = new FileUtil();
+                    FileUtil fileUtil = new FileUtil(Environment.DIRECTORY_MOVIES);
                     File file = fileUtil.createFile(fileName);
                     // 读取返回的文件流
                     FileOutputStream fileOutputStream = new FileOutputStream(file);

@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -13,6 +14,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.io.PipedReader;
+import java.util.EventListener;
+import java.util.HashMap;
 
 import abc.common.util.KtExpandUtil;
 import cn.example.common_module.AppContext;
@@ -28,8 +32,13 @@ public class FileUtil {
 
     private String path;
     private final String tag = "FFFFFFF";
+    public int IMAGE = 0;
+    public int VIDEO = 1;
+    // 文件类型
+    private String environmentType = Environment.DIRECTORY_MOVIES;
 
-    public FileUtil() throws Exception {
+    public FileUtil(String fileType) throws Exception {
+        environmentType = fileType;
         // 初始化文件夹存放路径
         path = getStorePath();
         File file = new File(path);
@@ -49,7 +58,8 @@ public class FileUtil {
 
         if (Build.VERSION.SDK_INT >= 29) {
             // 沙盒存储 位于app包内部 外部不可见 android p 以上
-            return AppContext.getAppContext().getExternalFilesDir(Environment.DIRECTORY_MOVIES).toString() + "/aaatestfill";
+            return AppContext.getAppContext().getExternalFilesDir(environmentType).toString() +
+                    "/aaatestfill";
         }
 
         // 外部存储
@@ -58,6 +68,7 @@ public class FileUtil {
 
     /**
      * 创建文件 在生成的文件夹下
+     *
      * @param fileName
      * @return
      */
@@ -77,7 +88,8 @@ public class FileUtil {
             // 构建要插入的数据
             ContentValues contentValues = new ContentValues();
             // todo fix waiting
-            contentValues.put(MediaStore.MediaColumns.TITLE, file.getName().substring(file.getName().lastIndexOf(".") + 1));
+            contentValues.put(MediaStore.MediaColumns.TITLE,
+                    file.getName().substring(file.getName().lastIndexOf(".") + 1));
             contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, file.getName());
             contentValues.put(MediaStore.MediaColumns.DATE_MODIFIED, System.currentTimeMillis());
             contentValues.put(MediaStore.MediaColumns.DATE_ADDED, System.currentTimeMillis());
@@ -86,7 +98,8 @@ public class FileUtil {
             //  contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4");
 
             if (Build.VERSION.SDK_INT >= 29) {
-                contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DCIM);
+                contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH,
+                        Environment.DIRECTORY_DCIM);
             } else {
                 contentValues.put(MediaStore.MediaColumns.DATA, file.getAbsolutePath());
             }
@@ -94,8 +107,15 @@ public class FileUtil {
             // 访问公共媒体数据
             ContentResolver contentResolver = AppContext.getAppContext().getContentResolver();
             // 这里要区分类型 是图片还是视频还是其他文件等等
-            //   Uri uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
-            Uri uri = contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, contentValues);
+
+            Uri uri = null;
+            if (TextUtils.equals(environmentType, Environment.DIRECTORY_PICTURES)) {
+                uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        contentValues);
+            } else {
+                uri = contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                        contentValues);
+            }
             if (uri != null) {
                 BufferedInputStream inputStream = null;
                 OutputStream outputStream = null;
@@ -178,8 +198,10 @@ public class FileUtil {
      * <p>
      * 参数：
      * type – 要返回的存储目录的类型。
-     * 应该是一个DIRECTORY_MUSIC ， DIRECTORY_PODCASTS ， DIRECTORY_RINGTONES ， DIRECTORY_ALARMS ， DIRECTORY_NOTIFICATIONS ，
-     * DIRECTORY_PICTURES ， DIRECTORY_MOVIES ， DIRECTORY_DOWNLOADS ， DIRECTORY_DCIM ，或DIRECTORY_DOCUMENTS 。 不能为空。
+     * 应该是一个DIRECTORY_MUSIC ， DIRECTORY_PODCASTS ， DIRECTORY_RINGTONES ， DIRECTORY_ALARMS ，
+     * DIRECTORY_NOTIFICATIONS ，
+     * DIRECTORY_PICTURES ， DIRECTORY_MOVIES ， DIRECTORY_DOWNLOADS ， DIRECTORY_DCIM
+     * ，或DIRECTORY_DOCUMENTS 。 不能为空。
      * 返回：
      * 返回目录的文件路径。 请注意，此目录可能尚不存在，因此您必须在使用它之前确保它存在，例如File.mkdirs()
      */

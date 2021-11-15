@@ -85,6 +85,8 @@ dependencies {
 
     // 此JavaPoet可以去生成Java文件  以面向对象的思维，生成代码
     api 'com.squareup:javapoet:1.9.0'
+
+    api 'com.airbnb.android:lottie:4.2.1'
 }
 
 repositories {
