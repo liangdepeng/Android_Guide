@@ -48,7 +48,7 @@ public class FileUtil {
             throw new Exception("SD卡异常");
 
         if (Build.VERSION.SDK_INT >= 29) {
-            // 沙盒存储 位于app包内部 外部不可见
+            // 沙盒存储 位于app包内部 外部不可见 android p 以上
             return AppContext.getAppContext().getExternalFilesDir(Environment.DIRECTORY_MOVIES).toString() + "/aaatestfill";
         }
 

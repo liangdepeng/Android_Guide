@@ -20,7 +20,7 @@ import com.example.myapplication.camera.CameraActivity
 import com.example.myapplication.database.DataBaseActivity
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.down.DownloadActivity
-import com.example.myapplication.kotlin.KotlinXCActivity
+import com.example.myapplication.kotlin_mvvm.KotlinXCActivity
 import com.example.myapplication.life.LifeActivity
 import com.example.myapplication.service.ServiceActivity
 import com.example.myapplication.socket.SocketClientActivity

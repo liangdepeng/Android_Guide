@@ -2,6 +2,7 @@ package com.example.myapplication.thread
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProvider
 import com.example.moudle_study.StudyTest
 import com.example.myapplication.R
 
@@ -12,6 +13,8 @@ class ThreadTestActivity : AppCompatActivity() {
         setContentView(R.layout.activity_thread_test)
 
         //StudyTest.test()
+
+        //ViewModelProvider(this)
     }
 
 }

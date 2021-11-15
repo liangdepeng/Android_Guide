@@ -1,4 +1,4 @@
-package com.example.myapplication.kotlin
+package com.example.myapplication.kotlin_mvvm
 
 import android.os.Bundle
 import android.util.Log

@@ -5,7 +5,7 @@ ViewModelStore存储了hashmap形势的类与ViewModel的对应，Factory负责�
 ViewModelStore被Activity或Fragment持有，AMS 调用onRetainNonConfigurationInstance 实现数据保存 以便横竖屏切换数据持久化
 Activity因配置原因销毁-重建时，ViewModelStore被NonConfigurationInstances保存
 数据共享实现 ViewModelProvider（ViewModelStoreOwner owner（为activity即可共享）,  Factory factory）
-再此需求时从从保存处恢复。
+再次需求时从从保存处恢复。
 
 // ondestroy 被销毁
  getLifecycle().addObserver(new LifecycleEventObserver() {

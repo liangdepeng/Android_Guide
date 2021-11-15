@@ -23,7 +23,7 @@
         <activity
             android:name=".down.DownloadActivity"
             android:exported="true" />
-        <activity android:name=".kotlin.KotlinXCActivity" />
+        <activity android:name=".kotlin_mvvm.KotlinXCActivity" />
         <activity
             android:name=".camera.CameraActivity"
             android:launchMode="singleTask" />

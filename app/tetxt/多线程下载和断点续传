@@ -1,0 +1,36 @@
+核心：
+1、基于 http1.1 协议
+  //设置获取实体数据的范围
+  connection.setRequestProperty("Range", "bytes=" + startPos + "-" + endPos);
+  connection.setRequestProperty("Connection", "Keep-Alive");
+2、 RandomAccessFile 可以从指定位置读写文件
+3、 文件下载进度实时更新数据库
+
+所谓断点续传，也就是要从文件已经下载的地方开始继续下载。在以前版本的 HTTP 协议是不支持断点的，
+HTTP/1.1 开始就支持了。一般断点下载时才用到 Range 和 Content-Range 实体头。
+
+Range
+用于请求头中，指定第一个字节的位置和最后一个字节的位置，一般格式：
+Range:(unit=first byte pos)-[last byte pos]
+
+Content-Range
+用于响应头，指定整个实体中的一部分的插入位置，他也指示了整个实体的长度。在服务器向客户返回一个部分响应，
+它必须描述响应覆盖的范围和整个实体长度。一般格式：
+Content-Range: bytes (unit first byte pos) - [last byte pos]/[entity legth]
+
+http ： 大文件传输
+
+压缩
+服务器对所传数据进行压缩，减小文件大小，浏览器接收到后再用相同方式解压缩。
+可用Accept-Encoding、Content-Encoding表示压缩方式。
+之前所提到的三种压缩方式：gzip、deflate、br。gzip适用于文本压缩，br是Http专用的压缩方式
+
+分段传输
+对大文件不直接整体传输，化整为零，分块传输，接收到后再组装。
+用Transfer-Encoding：chunked表示使用使用分块传输。
+分块传输的格式
+body里的数据由多个数据分块（chunk）组成。
+每个分块第一行为表示数据块长度的16进制数，结束回车。
+后面为数据块内容，结束回车。
+最后以一个长度为0的数据块结尾。
+
