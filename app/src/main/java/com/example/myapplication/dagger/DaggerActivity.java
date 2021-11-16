@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.derry.annotation.BindMyView;
 import com.example.myapplication.R;
+import com.example.myapplication.base.BaseActivity;
 import com.example.myapplication.dagger.expand.StudentMutil;
 
 import javax.inject.Inject;
@@ -23,7 +24,7 @@ import javax.inject.Inject;
  *
  */
 @BindMyView("value123213")
-public class DaggerActivity extends AppCompatActivity {
+public class DaggerActivity extends BaseActivity {
 
 
     // 使用javax.inject.Inject注解来标注需要 Dagger 2 注入的依赖，

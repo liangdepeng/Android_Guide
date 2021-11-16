@@ -1,8 +1,8 @@
 1、先创建okhttpClient对象
 2、然后构建Request请求对象 get，post
 3、然后使用okhttpClient生成  RealCall对象 okhttpClient.newCall
-4、同步Response response= call.execute()
-      异步 call.enqueue(callback成功失败回调)
+4、同步 Response response= call.execute()
+   异步 call.enqueue(callback成功失败回调)
 
 请求核心方法 getResponseWithInterceptorChain
 
@@ -11,15 +11,27 @@
       2. BridgeInterceptor  桥接应用层与网络层，添加必要的header
       3. CacheInterceptor 缓存拦截器 处理缓存相关的请求头 是否有必要直接使用缓存
       4. ConnectionInterceptor 获得一个安全有效的连接
-      5. CallServerInterceptior 真正请求网络的拦截器
+      5. CallServerInterceptor 真正请求网络的拦截器 这是链中的最后一个拦截器。 它对服务器进行网络调用。
 
-client.dispatcher
+client.dispatcher 核心线程数为0，空闲了60秒后，所有线程会被清空；最大线程数无限制，调度中心Dispatcher会限制请求数。
+executorServiceOrNull = ThreadPoolExecutor(0, Int.MAX_VALUE, 60, TimeUnit.SECONDS,
+     SynchronousQueue(), threadFactory("$okHttpName Dispatcher", false))
 
- 定义了三个双向任务队列，
-两个异步队列：准备执行的请求队列 readyAsyncCalls、正在运行的请求队列 runningAsyncCalls；
-一个正在运行的同步请求队列 runningSyncCalls；
+@get:Synchronized var maxRequests = 64
+64 并发执行的最大请求数。 上面这个请求在内存中排队，等待正在运行的调用完成。
+如果在调用时有超过maxRequests 个请求在进行中，则这些请求将保持在进行中。
 
-另外还有一个线程池 executorService
+@get:Synchronized var maxRequestsPerHost = 5
+每个主机并发执行的最大请求数。 这通过 URL 的主机名限制请求。
+请注意，对单个 IP 地址的并发请求仍可能超过此限制：
+多个主机名可能共享一个 IP 地址或通过同一个 HTTP 代理进行路由。
+如果在调用时有超过maxRequestsPerHost 的请求在进行中，则这些请求将保持在进行中。
+与主机的 WebSocket 连接不计入此限制。
+
+定义了三个双向任务队列，
+两个异步队列：准备执行的请求队列 readyAsyncCalls、
+             正在运行的请求队列 runningAsyncCalls；
+一个正在运行的同步请求队列： runningSyncCalls；
 
 同步方法
     try {
@@ -32,4 +44,97 @@ client.dispatcher
 异步方法
 {
     client.dispatcher.enqueue(AsyncCall(responseCallback))
+}
+
+retrofit 主要对 okhttp 的封装 采用了动态代理的模式，create 方法 动态生成接口api实现类
+当调用api的方法时 会调用到 InvocationHandler.invoke() 方法
+然后会调用到里面的 loadServiceMethod().invoke()
+loadServiceMethod 会优先匹配查找缓存 因为内部会调用 RequestFactory 通过反射解析注解耗性能。
+会返回 HttpServiceMethod 负责适配和转换处理，将接口方法的调用调整为HTTP调用
+最终返回 CallAdapted  kotlin 会区分 单独处理 调用携程的相关方法
+调用invoke()
+  @Override
+  final @Nullable ReturnT invoke(Object[] args) {
+    Call<ResponseT> call = new OkHttpCall<>(requestFactory, args, callFactory, responseConverter);
+    return adapt(call, args);
+  }
+  调用到 okhttp enqueue 见最后
+      @Override
+      public CompletableFuture<Response<R>> adapt(final Call<R> call) {
+        CompletableFuture<Response<R>> future = new CallCancelCompletableFuture<>(call);
+        call.enqueue(new ResponseCallback(future));
+        return future;
+      }
+
+static final class CallAdapted<ResponseT, ReturnT> extends HttpServiceMethod<ResponseT, ReturnT> {}
+static final class SuspendForResponse<ResponseT> extends HttpServiceMethod<ResponseT, Object> {}
+static final class SuspendForBody<ResponseT> extends HttpServiceMethod<ResponseT, Object> {}
+
+  @Override
+  public void enqueue(final Callback<T> callback) {
+    Objects.requireNonNull(callback, "callback == null");
+
+    okhttp3.Call call;
+    Throwable failure;
+
+    synchronized (this) {
+      if (executed) throw new IllegalStateException("Already executed.");
+      executed = true;
+
+      call = rawCall;
+      failure = creationFailure;
+      if (call == null && failure == null) {
+        try {
+          call = rawCall = createRawCall();
+        } catch (Throwable t) {
+          throwIfFatal(t);
+          failure = creationFailure = t;
+        }
+      }
+    }
+
+    if (failure != null) {
+      callback.onFailure(this, failure);
+      return;
+    }
+
+    if (canceled) {
+      call.cancel();
+    }
+
+    call.enqueue(
+        new okhttp3.Callback() {
+          @Override
+          public void onResponse(okhttp3.Call call, okhttp3.Response rawResponse) {
+            Response<T> response;
+            try {
+              response = parseResponse(rawResponse);
+            } catch (Throwable e) {
+              throwIfFatal(e);
+              callFailure(e);
+              return;
+            }
+
+            try {
+              callback.onResponse(OkHttpCall.this, response);
+            } catch (Throwable t) {
+              throwIfFatal(t);
+              t.printStackTrace(); // TODO this is not great
+            }
+          }
+
+          @Override
+          public void onFailure(okhttp3.Call call, IOException e) {
+            callFailure(e);
+          }
+
+          private void callFailure(Throwable e) {
+            try {
+              callback.onFailure(OkHttpCall.this, e);
+            } catch (Throwable t) {
+              throwIfFatal(t);
+              t.printStackTrace(); // TODO this is not great
+            }
+          }
+        });
   }

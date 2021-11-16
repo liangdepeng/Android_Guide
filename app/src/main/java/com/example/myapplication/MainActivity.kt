@@ -21,6 +21,7 @@ import com.example.myapplication.camera.CameraActivity
 import com.example.myapplication.database.DataBaseActivity
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.down.DownloadActivity
+import com.example.myapplication.gaoji.HookActivity
 import com.example.myapplication.kotlin_mvvm.KotlinXCActivity
 import com.example.myapplication.life.LifeActivity
 import com.example.myapplication.service.ServiceActivity
@@ -66,6 +67,9 @@ class MainActivity : AppCompatActivity() {
         }, ClassBean().apply {
             aClass = LottieActivity::class.java
             classInfo = "Lottie动画"
+        }, ClassBean().apply {
+            aClass = HookActivity::class.java
+            classInfo = "hook初探"
         })
 
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
@@ -130,6 +134,11 @@ class MainActivity : AppCompatActivity() {
         override fun getItemCount(): Int {
             return list.size
         }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
 
     }
 

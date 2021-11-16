@@ -1,0 +1,23 @@
+
+
+卡顿优化
+1、布局嵌套层级减少 include viewStub
+2、主线程禁止耗时操作
+3、
+
+卡顿监控
+1、基于消息队列
+1)  替换 Looper 的 Printer
+   Looper 暴露了一个方法:
+   public void setMessageLogging(@Nullable Printer printer) {
+       mLogging = printer;
+   }
+   // duration 3090 根据这个然后再加上自己需要的附加信息，比如所在activity等 可以大概判断 卡顿的位置
+   xxx E/MessageLogging: time : 7 ms   message: >>>>> Dispatching to Handler (android.app.ActivityThread$H) {8440cba} null: 159
+   xxx E/MessageLogging: time : 3090 ms   message: <<<<< Finished to Handler (android.app.ActivityThread$H) {8440cba} null duration: 3090
+2)  插入空消息到消息队列
+   通过一个监控线程，每隔1秒向主线程消息队列的头部插入一条空消息。假设1秒后这个消息并没有被主线程消费掉，说明阻塞消息运行的时间在0～1秒之间。
+   换句话说，如果我们需要监控3秒卡顿，那在第4次轮询中，头部消息依然没有被消费的话，就可以确定主线程出现了一次3秒以上的卡顿。
+2、
+
+

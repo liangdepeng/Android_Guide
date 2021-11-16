@@ -16,9 +16,10 @@ import androidx.core.content.ContextCompat;
 
 import com.example.down_module.MultiThreadManager;
 import com.example.down_module.SingleThreadManager;
+import com.example.myapplication.base.BaseActivity;
 import com.example.myapplication.databinding.ActivityDownloadBinding;
 
-public class DownloadActivity extends AppCompatActivity {
+public class DownloadActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

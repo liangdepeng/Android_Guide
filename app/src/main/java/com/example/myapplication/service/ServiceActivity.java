@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.base.BaseActivity;
 import com.example.myapplication.base.BaseRecyclerAdapter;
 import com.example.myapplication.base.BaseViewHolder;
 import com.example.myapplication.databinding.ActivityServiceBinding;
@@ -34,7 +35,7 @@ import java.lang.ref.WeakReference;
  * <p>
  * Summary: 服务 四大组件之一
  */
-public class ServiceActivity extends AppCompatActivity {
+public class ServiceActivity extends BaseActivity {
 
     // 布局绑定
     private ActivityServiceBinding binding;

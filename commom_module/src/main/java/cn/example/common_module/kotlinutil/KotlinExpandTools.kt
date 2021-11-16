@@ -2,8 +2,10 @@ package com.example.common_module
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.os.Looper
+import android.util.TypedValue
 import android.widget.TextView
 import android.widget.Toast
 import cn.example.common_module.AppContext
@@ -69,5 +71,24 @@ fun Any.snackToast(context: Context?, callback: Snackbar.Callback? = null) = run
         simpleToast()
     }
 }
+
+
+fun Any.dpToPx(dp: Float): Int {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, dp, Resources.getSystem().displayMetrics
+    ).toInt()
+}
+
+fun Any.spToPx(dp: Float): Int {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_SP, dp, Resources.getSystem().displayMetrics
+    ).toInt()
+}
+
+val Any.userTag: String
+    get() {
+        return "user_log_tag"
+    }
+
 
 

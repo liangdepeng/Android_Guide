@@ -1,10 +1,10 @@
 package abc.common.util
 
+import abc.common.util.KtExpandUtil.Companion.isOnMainThread
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import com.example.common_module.simpleToast
-import com.example.common_module.snackToast
+import com.example.common_module.*
 
 /**
  * Created by ldp.
@@ -28,9 +28,16 @@ class KtExpandUtil {
         }
 
         fun isOnMainThread(): Boolean {
-            return Looper.myLooper() == Looper.getMainLooper()
+            return isOnMainThread
         }
 
+        fun dp2px(dpValue: Float): Int {
+            return dpToPx(dpValue)
+        }
+
+        fun sp2px(spValue: Float): Int {
+            return spToPx(spValue)
+        }
 
     }
 }

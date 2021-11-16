@@ -8,11 +8,16 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Looper
 import android.provider.MediaStore
+import android.util.Printer
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.example.common_module.dpToPx
 import com.example.common_module.simpleToast
+import com.example.common_module.snackToast
+import com.example.common_module.spToPx
 import com.example.down_module.util.FileUtil
 import com.example.myapplication.base.BaseActivity
 import com.example.myapplication.databinding.ActivityCamreaBinding
@@ -96,5 +101,17 @@ class CameraActivity : BaseActivity() {
                 binding.cameraIv.setImageBitmap(bitmap)
             }
         }
+    }
+
+    private fun testKTexpandUtil(){
+        isMainThread
+        dpToPx(12f)
+        spToPx(12f)
+
+        binding.cameraIv.dpToPx(12f)
+
+        "sim".simpleToast()
+        "simsmi".snackToast(this)
+
     }
 }
