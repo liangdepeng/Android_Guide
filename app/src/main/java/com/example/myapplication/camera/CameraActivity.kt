@@ -31,8 +31,7 @@ class CameraActivity : BaseActivity() {
         binding.gotoCameraBtn.setOnClickListener {
 
             if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.CAMERA
+                    this, Manifest.permission.CAMERA
                 ) == PackageManager.PERMISSION_DENIED
             ) {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 123321)
@@ -80,17 +79,17 @@ class CameraActivity : BaseActivity() {
 
                 val fileUtil = FileUtil(Environment.DIRECTORY_PICTURES)
                 var file = fileUtil.createFile("${System.currentTimeMillis()}zzxxjj.png")
-                bitmap.compress(Bitmap.CompressFormat.PNG,100,file.outputStream())
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, file.outputStream())
 
                 // todo  方法无效待修改
                 val degree = ImageUtil.readPictureDegree(file.path)
-                if (degree!=0){
+                if (degree != 0) {
                     bitmap = ImageUtil.rotaingImageView(degree, bitmap)
                     file = fileUtil.createFile("${System.currentTimeMillis()}zzxxjjkk.png")
-                    bitmap.compress(Bitmap.CompressFormat.PNG,100,file.outputStream())
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, file.outputStream())
                 }
 
-                if (Build.VERSION.SDK_INT>=29){
+                if (Build.VERSION.SDK_INT >= 29) {
                     fileUtil.copyFileToSdCardForAndroidQ(file)
                 }
 

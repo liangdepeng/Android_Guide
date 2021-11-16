@@ -81,7 +81,7 @@ public class FileUtil {
     /**
      * Android Q 开始android不允许直接访问外部存储 每个应用会有沙盒机制存储
      *
-     * @param file 手动复制文件插入媒体库 使用ContentProvider
+     * @param file 手动复制文件插入媒体库 使用 ContentProvider
      */
     public void copyFileToSdCardForAndroidQ(File file) {
         try {
@@ -94,7 +94,7 @@ public class FileUtil {
             contentValues.put(MediaStore.MediaColumns.DATE_MODIFIED, System.currentTimeMillis());
             contentValues.put(MediaStore.MediaColumns.DATE_ADDED, System.currentTimeMillis());
             contentValues.put(MediaStore.MediaColumns.SIZE, file.length());
-            //
+            //2018.12-2019.12 2020.05-2021-至今
             //  contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4");
 
             if (Build.VERSION.SDK_INT >= 29) {
