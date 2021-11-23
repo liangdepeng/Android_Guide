@@ -5,18 +5,18 @@ Java 语言中的类、方法、变量、参数和包等都可以被标注。和
 当然它也支持自定义 Java 标注。
 
 注解作用：
-  1）编译检查
-  Annotation 具有"让编译器进行编译检查的作用"。
-  例如，@SuppressWarnings, @Deprecated 和 @Override 都具有编译检查作用。
-  (01) 关于 @SuppressWarnings 和 @Deprecated，已经在"第3部分"中详细介绍过了。这里就不再举例说明了。
-  (02) 若某个方法被 @Override 的标注，则意味着该方法会覆盖父类中的同名方法。如果有方法被 @Override 标示，
-  但父类中却没有"被 @Override 标注"的同名方法，则编译器会报错。
-  2) 在反射中使用 Annotation
-  在反射的 Class, Method, Field 等函数中，有许多于 Annotation 相关的接口。 example：TestJava.class
-  3) 根据 Annotation 生成帮助文档
-  通过给 Annotation 注解加上 @Documented 标签，能使该 Annotation 标签出现在 javadoc 中。
-  4) 能够帮忙查看查看代码
-  通过 @Override, @Deprecated 等，我们能很方便的了解程序的大致结构。、
+1）编译检查
+Annotation 具有"让编译器进行编译检查的作用"。
+例如，@SuppressWarnings, @Deprecated 和 @Override 都具有编译检查作用。
+(01) 关于 @SuppressWarnings 和 @Deprecated，已经在"第3部分"中详细介绍过了。这里就不再举例说明了。
+(02) 若某个方法被 @Override 的标注，则意味着该方法会覆盖父类中的同名方法。如果有方法被 @Override 标示，
+但父类中却没有"被 @Override 标注"的同名方法，则编译器会报错。
+2) 在反射中使用 Annotation
+在反射的 Class, Method, Field 等函数中，有许多于 Annotation 相关的接口。 example：TestJava.class
+3) 根据 Annotation 生成帮助文档
+通过给 Annotation 注解加上 @Documented 标签，能使该 Annotation 标签出现在 javadoc 中。
+4) 能够帮忙查看查看代码
+通过 @Override, @Deprecated 等，我们能很方便的了解程序的大致结构。、
 
 Android APT 技术  简单来说就是在编译期，通过注解生成.java文件
 APT(Annotation Processing Tool)即注解处理器，是一种处理注解的工具，确切的说它是javac的一个工具，
