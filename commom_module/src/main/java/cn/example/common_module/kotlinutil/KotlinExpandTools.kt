@@ -6,10 +6,12 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Looper
 import android.util.TypedValue
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import cn.example.common_module.AppContext
 import com.google.android.material.snackbar.Snackbar
+import com.example.common_module.R
 
 /**
  * Created by ldp.
@@ -90,5 +92,21 @@ val Any.userTag: String
         return "user_log_tag"
     }
 
+var <T : View> T.lastClickMills: Long
+    get() {
+        val tag = getTag(R.id.delay_time_key)
+        return if (tag == null) 0L else (tag as? Long) ?: 0L
+    }
+    set(value) {
+        setTag(R.id.delay_time_key, value)
+    }
 
+fun <T : View> T.setOnMyClickListener(delayMills: Long = 500L, block: (T) -> Unit) {
+    setOnClickListener {
+        if (System.currentTimeMillis() - lastClickMills > delayMills) {
+            block.invoke(this)
+            lastClickMills = System.currentTimeMillis()
+        }
+    }
+}
 

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--防重复点击点击-->
+    <item name="delay_time_key" type="id"/>
+    <item name="last_time_key" type="id"/>
+</resources>
