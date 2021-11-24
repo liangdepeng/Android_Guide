@@ -6,6 +6,7 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Looper;
+import android.os.MessageQueue;
 import android.util.Log;
 import android.util.Printer;
 
@@ -20,7 +21,7 @@ import cn.example.common_module.JumpServiceFactory;
  * <p>
  * Date: 2021/9/2
  * <p>
- * Summary:
+ * Summary: Application
  */
 public class MyApplication extends Application {
 
@@ -48,6 +49,19 @@ public class MyApplication extends Application {
             }
         });
 
+        Looper.myQueue().addIdleHandler(new MessageQueue.IdleHandler() {
+            @Override
+            public boolean queueIdle() {
+                // Loop 所绑定的线程 空闲时 调用此方法
+
+                // 延迟初始化操作等等
+
+                // 如果需要循环执行 返回true 空闲时会一直执行 直到返回 false
+                return false;
+            }
+        });
+
+        // 监控所有activity 生命周期
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {

@@ -42,7 +42,7 @@ public void register(Object subscriber) {
         Subscription newSubscription = new Subscription(subscriber, subscriberMethod);
         // subscriptionsByEventType map 集合 保存 参数类型 和 对应的 属于这个参数类型的方法集合
         CopyOnWriteArrayList<Subscription> subscriptions = subscriptionsByEventType.get(eventType);
-        // 还没有这种参数类型 添加进去新的 list
+        // 还没有这种参数类型 添加进去新的 list （key -> 参数类型 value -> 统一参数类型的方法list）
         if (subscriptions == null) {
             subscriptions = new CopyOnWriteArrayList<>();
             subscriptionsByEventType.put(eventType, subscriptions);
