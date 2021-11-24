@@ -21,9 +21,14 @@ ASYNC 表示无论事件发布的线程是哪一个，事件处理函数始终�
 
 
 public void register(Object subscriber) {
-        Class<?> subscriberClass = subscriber.getClass();
+        // 获取class对象
+        Class<?> subscriberClass = subscriber.getClass();、
+        // 查找 是否有被 @Subscribe 注解 的方法
+         1) 会查找 map 缓存 是否有 该class对象的缓存 有的话直接返回 被 @Subscribe 注解 的方法 list
+         2) 缓存没有 会去反射查找 并且缓存
         List<SubscriberMethod> subscriberMethods = subscriberMethodFinder.findSubscriberMethods(subscriberClass);
         synchronized (this) {
+            // 遍历添加 每个 订阅者和对应的方法
             for (SubscriberMethod subscriberMethod : subscriberMethods) {
                 subscribe(subscriber, subscriberMethod);
             }
@@ -33,12 +38,34 @@ public void register(Object subscriber) {
     // Must be called in synchronized block
     private void subscribe(Object subscriber, SubscriberMethod subscriberMethod) {
         Class<?> eventType = subscriberMethod.eventType;
+        // 封装订阅者和 方法成一个对象
         Subscription newSubscription = new Subscription(subscriber, subscriberMethod);
+        // subscriptionsByEventType map 集合 保存 参数类型 和 对应的 属于这个参数类型的方法集合
         CopyOnWriteArrayList<Subscription> subscriptions = subscriptionsByEventType.get(eventType);
+        // 还没有这种参数类型 添加进去新的 list
+        if (subscriptions == null) {
+            subscriptions = new CopyOnWriteArrayList<>();
+            subscriptionsByEventType.put(eventType, subscriptions);
+        } else {
+        // 已存在说明 已经注册过了 不能重复注册
+            if (subscriptions.contains(newSubscription)) {
+                throw new EventBusException("Subscriber " + subscriber.getClass() + " already registered to event "
+                        + eventType);
+            }
+        }
 
+        int size = subscriptions.size();
+        for (int i = 0; i <= size; i++) {
+        // 遍历集合 按照优先级插入消息
+            if (i == size || subscriberMethod.priority > subscriptions.get(i).subscriberMethod.priority) {
+                subscriptions.add(i, newSubscription);
+                break;
+            }
+        }
 。。。。
 
-if (subscriberMethod.sticky) {
+         // 在订阅的时候就考虑黏性事件直接分发
+         if (subscriberMethod.sticky) {
             if (eventInheritance) {
                 // 考虑黏性事件
                 Set<Map.Entry<Class<?>, Object>> entries = stickyEvents.entrySet();
@@ -48,12 +75,12 @@ if (subscriberMethod.sticky) {
                         Object stickyEvent = entry.getValue();
                         checkPostStickyEventToSubscription(newSubscription, stickyEvent);
 
-    private void checkPostStickyEventToSubscription(Subscription newSubscription, Object stickyEvent) {
-        if (stickyEvent != null) {
-            // If the subscriber is trying to abort the event, it will fail (event is not tracked in posting state)
-            // --> Strange corner case, which we don't take care of here.
-            postToSubscription(newSubscription, stickyEvent, isMainThread());
-        }
+                        private void checkPostStickyEventToSubscription(Subscription newSubscription, Object stickyEvent) {
+                if (stickyEvent != null) {
+                    // If the subscriber is trying to abort the event, it will fail (event is not tracked in posting state)
+                    // --> Strange corner case, which we don't take care of here.
+                    postToSubscription(newSubscription, stickyEvent, isMainThread());
+                }
     }
 
                     }
@@ -64,6 +91,7 @@ if (subscriberMethod.sticky) {
             }
         }
 
+    // 事件分发
     private void postToSubscription(Subscription subscription, Object event, boolean isMainThread) {
         switch (subscription.subscriberMethod.threadMode) {
             case POSTING:
@@ -99,7 +127,7 @@ if (subscriberMethod.sticky) {
         }
     }
 
-
+    // 事件通过反射执行
     void invokeSubscriber(Subscription subscription, Object event) {
         try {
             subscription.subscriberMethod.method.invoke(subscription.subscriber, event);
@@ -107,5 +135,56 @@ if (subscriberMethod.sticky) {
             handleSubscriberException(subscription, event, e.getCause());
         } catch (IllegalAccessException e) {
             throw new IllegalStateException("Unexpected exception", e);
+        }
+    }
+
+    // 发送事件
+    // 先获取当前线程的发送队列 threadlocal 存储的   加入发送队列
+    // 如果 当前线程正在分发的话 本次消息会被直接分发掉 因为已经加入当前线程的分发队列
+    // 否则 开启循环分发 每次分发最前面的
+    public void post(Object event) {
+        PostingThreadState postingState = currentPostingThreadState.get();
+        List<Object> eventQueue = postingState.eventQueue;
+        eventQueue.add(event);
+
+        if (!postingState.isPosting) {
+            postingState.isMainThread = isMainThread();
+            postingState.isPosting = true;
+            if (postingState.canceled) {
+                throw new EventBusException("Internal error. Abort state was not reset");
+            }
+            try {
+                while (!eventQueue.isEmpty()) {
+                    postSingleEvent(eventQueue.remove(0), postingState);
+                }
+            } finally {
+                postingState.isPosting = false;
+                postingState.isMainThread = false;
+            }
+        }
+    }
+
+    // 事件分发 根据 参数类型 查找对应的 key 为参数类型的 注册列表
+    private void postSingleEvent(Object event, PostingThreadState postingState) throws Error {
+        Class<?> eventClass = event.getClass();
+        boolean subscriptionFound = false;
+        if (eventInheritance) {
+            List<Class<?>> eventTypes = lookupAllEventTypes(eventClass);
+            int countTypes = eventTypes.size();
+            for (int h = 0; h < countTypes; h++) {
+                Class<?> clazz = eventTypes.get(h);
+                subscriptionFound |= postSingleEventForEventType(event, postingState, clazz);
+            }
+        } else {
+            subscriptionFound = postSingleEventForEventType(event, postingState, eventClass);
+        }
+        if (!subscriptionFound) {
+            if (logNoSubscriberMessages) {
+                logger.log(Level.FINE, "No subscribers registered for event " + eventClass);
+            }
+            if (sendNoSubscriberEvent && eventClass != NoSubscriberEvent.class &&
+                    eventClass != SubscriberExceptionEvent.class) {
+                post(new NoSubscriberEvent(this, event));
+            }
         }
     }
