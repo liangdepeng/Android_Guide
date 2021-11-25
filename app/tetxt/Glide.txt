@@ -3,23 +3,19 @@ Glide.with(content)
      .into(imageView);
 with绑定生命周期，load指定加载资源，into指明加载目标
 
-就是将 Gif 解码成多张图片进行无限轮播，每帧切换都是一次图片加载请求，
+gif加载：就是将 Gif 解码成多张图片进行无限轮播，每帧切换都是一次图片加载请求，
 再加载到新的一帧数据之后会对旧的一帧数据进行清除，然后再继续下一帧数据的加载请求，
 以此类推，使用 Handler 发送消息实现循环播放。
 
-https://www.cnblogs.com/billshen/p/13306285.html
-
-DiskCacheStrategy.NONE 不缓存文件
-DiskCacheStrategy.SOURCE 只缓存原图
-DiskCacheStrategy.RESULT 只缓存最终加载的图（默认的缓存略）
-DiskCacheStrategy.ALL 同时缓存原图和结果图
-
 //with返回一个RequestManager
-public static RequestManager with(Activity activity) {
+  @NonNull
+  public static RequestManager with(@NonNull FragmentActivity activity) {
     return getRetriever(activity).get(activity);
-}
+  }
+
 //无论调用的是哪个with重载方法，最后都会到这里
 public RequestManager get(Activity activity) {
+    // 如果在工作线程 则 使用 application context
     if (Util.isOnBackgroundThread()) {
         return get(activity.getApplicationContext());
     } else {
@@ -48,10 +44,13 @@ private RequestManager fragmentGet(Context context,
 
   private RequestManagerFragment getRequestManagerFragment(
       @NonNull final android.app.FragmentManager fm, @Nullable android.app.Fragment parentHint) {
+      // 通过tag 寻找 fragment
     RequestManagerFragment current = (RequestManagerFragment) fm.findFragmentByTag(FRAGMENT_TAG);
     if (current == null) {
+     // 找不到 再到缓存找 fragment
       current = pendingRequestManagerFragments.get(fm);
       if (current == null) {
+       // 最后才新建
         current = new RequestManagerFragment(); 、、持有Lifecycle
         current.setParentFragmentHint(parentHint);
         pendingRequestManagerFragments.put(fm, current);
@@ -62,7 +61,54 @@ private RequestManager fragmentGet(Context context,
     return current;
   }
 
+
+  ============== into ===============
+
+  @NonNull
+  public ViewTarget<ImageView, TranscodeType> into(@NonNull ImageView view) {
+    Util.assertMainThread();
+    Preconditions.checkNotNull(view);
+
+    BaseRequestOptions<?> requestOptions = this;
+    if (!requestOptions.isTransformationSet()
+        && requestOptions.isTransformationAllowed()
+        && view.getScaleType() != null) {
+      // Clone in this method so that if we use this RequestBuilder to load into a View and then
+      // into a different target, we don't retain the transformation applied based on the previous
+      // View's scale type.
+      switch (view.getScaleType()) {
+        case CENTER_CROP:
+          requestOptions = requestOptions.clone().optionalCenterCrop();
+          break;
+        case CENTER_INSIDE:
+          requestOptions = requestOptions.clone().optionalCenterInside();
+          break;
+       ......... 根据设置的模式做一些处理
+      }
+    }
+
+    // 构建 ImageViewTarget 包装一层
+    return into(
+        glideContext.buildImageViewTarget(view, transcodeClass),
+        /*targetListener=*/ null,
+        requestOptions,
+        Executors.mainThreadExecutor());
+  }
+
+
     ---------缓存------------
+
+
+https://www.cnblogs.com/billshen/p/13306285.html
+
+DiskCacheStrategy.NONE 不缓存文件
+DiskCacheStrategy.SOURCE 只缓存原图
+DiskCacheStrategy.RESULT 只缓存最终加载的图（默认的缓存略）
+DiskCacheStrategy.ALL 同时缓存原图和结果图
+
+
+    // 内存缓存 LRU 缓存
+    MemoryCache  memoryCache = new LruResourceCache(memorySizeCalculator.getMemoryCacheSize());
 
   private EngineResource<?> loadFromMemory(
       EngineKey key, boolean isMemoryCacheable, long startTime) {
@@ -70,27 +116,62 @@ private RequestManager fragmentGet(Context context,
       return null;
     }
 
+    // 内存缓存第一个 activeResources hashmap 弱引用 活动缓存 正在展示的
     EngineResource<?> active = loadFromActiveResources(key);
 
   @Nullable
   private EngineResource<?> loadFromActiveResources(Key key) {
     EngineResource<?> active = activeResources.get(key);
     if (active != null) {
+    // 计数器 +1
       active.acquire();
     }
 
     return active;
   }
 
+    // 内存缓存第二个 cache LRU形式缓存
     EngineResource<?> cached = loadFromCache(key);
+
   private EngineResource<?> loadFromCache(Key key) {
     EngineResource<?> cached = getEngineResourceFromCache(key);
     if (cached != null) {
       cached.acquire();
+      // 从内存缓存取出放到活动缓存
       activeResources.activate(key, cached);
     }
     return cached;
   }
+
+   // 从内存缓存取出放到活动缓存
+    synchronized void activate(Key key, EngineResource<?> resource) {
+      ResourceWeakReference toPut =
+          new ResourceWeakReference(
+              key, resource, resourceReferenceQueue, isActiveResourceRetentionAllowed);
+
+      ResourceWeakReference removed = activeEngineResources.put(key, toPut);
+      if (removed != null) {
+        removed.reset();
+      }
+    }
+
+   // 查找 内存缓存第二个 cache LRU形式缓存
+    private EngineResource<?> getEngineResourceFromCache(Key key) {
+      Resource<?> cached = cache.remove(key);
+
+      final EngineResource<?> result;
+      if (cached == null) {
+        result = null;
+      } else if (cached instanceof EngineResource) {
+        // Save an object allocation if we've cached an EngineResource (the typical case).
+        result = (EngineResource<?>) cached;
+      } else {
+        result =
+            new EngineResource<>(
+                cached, /*isMemoryCacheable=*/ true, /*isRecyclable=*/ true, key, /*listener=*/ this);
+      }
+      return result;
+    }
 
 }
 
@@ -113,14 +194,15 @@ EngineKey key = keyFactory.buildKey(id, signature, width, height, loadProvider.g
 
 3.内存缓存原理
 
-①.缓存算法：算法是lru算法（当前看不见的图片，用LinkHashMap来存储的）+弱引用算法（当前正在显示的图片，
-用HashMap来存储的）
+①.缓存算法：
+1、activeResources 弱引用算法（当前正在显示的图片，用HashMap来存储的）
+2、LruResourceCache 算法是lru算法（当前看不见的图片，用LinkHashMap来存储的）
+3、diskdatacache 为磁盘缓存的原图片缓存；
+4、diskresourcecache 为磁盘缓存的处理后图片缓存
 
-②.两个缓存区域：LruResourceCache(lru算法存储区域)+activeResources(弱引用算法存储区域)
+优先级： 【【【  activeResources  >  LruResourceCache > 磁盘缓存 > 网络请求  】】】
 
-③.优先级：LruResourceCache>activeResources
-
-④.查找顺序：先从LruResourceCache中查找，找到了移除并添加到activeResources中，找不到再从activeResources中查找。
+④.查找顺序：先从activeResources中查找，找不到再去LruResourceCache中查找，找到了移除并添加到activeResources中，否则就去硬盘查找。
 
 ⑤.引用计数acquired:acquired()方法让其+1，release()方法让其-1，经过acquired()方法使acquired>0在activeResources中
 存储，然后不再使用调用release()方法使acquired==0被activeResources移除并且put到LruResourceCache中
