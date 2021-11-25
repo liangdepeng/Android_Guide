@@ -13,6 +13,8 @@ import android.util.Printer;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.tamsiree.rxkit.RxTool;
+
 import cn.example.common_module.AppContext;
 import cn.example.common_module.JumpServiceFactory;
 
@@ -35,6 +37,7 @@ public class MyApplication extends Application {
         super.onCreate();
         context = getApplicationContext();
 
+        RxTool.init(this);
         // 组建通信初始化
         JumpServiceFactory.INSTANCE.init(AppComponent.class.getName());
         // application context
