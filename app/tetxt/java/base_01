@@ -1,0 +1,48 @@
+1、java 基础 总结文档 https://www.runoob.com/java/java-inheritance.html
+
+2、String、StringBuffer和StringBuilder的区别
+ 1.String 字符串常量，字符串长度不可变。Java中String是immutable（不可变）的。
+ 2.StringBuffer（JDK1.0）字符串变量（Synchronized，即线程安全）
+ 3.StringBuilder（JDK5.0）字符串变量（非线程安全）。
+
+3、String的不可变性
+ 2.1）不可变对象
+ 不可变类只是其实例不能被修改的类，每个实例中包含的所有信息都必须在创建该实例的时候就提供，并在对象的整个生命周期内固定不变。
+ 2.2）如何实现不可变
+ 1、不要提供任何会修改对象状态的方法。
+ 2、保证类不会被拓展（一般声明为final即可）。
+ 3、使所有的域都是 private final的。
+ 4、确保对于任何可变组件的互斥访问（可以理解如果中存在可变对象的域，得确保客户端无法获得其引用，并且不要使用客户端提供的对象来初始化这样的域）。
+ 2.3）String的不可变
+ 2.4）改变"不可变对象"
+ 现在我们已经知道了String的成员变量是private final 的，也就是初始化之后不可改变的。同时也提到value这个成员变量其实也是一个引用，
+ 指向真正的数组内存地址，不能改变它的引用指向，我们能不能直接改变内存数组中的数据呢，那么就需要获取到value，而value是私有的，可用反射获取
+
+4、Error 和 Exception
+Java异常以Throwable开始，扩展出Error和Exception。
+-> Error是程序代码无法处理的错误，比如OutOfMemoryError、ThreadDeath等。这些异常发生时，Java虚拟机（JVM）一般会选择线程终止退出，
+其表示程序在运行期间出现了十分严重、不可恢复的错误，应用程序只能中止运行。
+-> Exception分运行时异常和非运行时异常。运行时异常都是RuntimeException类及其子类异常，如NullPointerException、IndexOutOfBoundsException等，
+这些异常也是不检查异常，程序代码中自行选择捕获处理，也可以不处理。这些异常一般是由程序逻辑错误引起的，程序代码应该从逻辑角度尽可能避免这类异常的发生。
+所有继承Exception且不是RuntimeException的异常都是非运行时异常，也称检查异常，如上图中的IOException和ClassNotFoundException，编译器会对其作检查，
+故程序中一定会对该异常进行处理，处理方法要么在方法体中声明抛出checked Exception，要么使用catch语句捕获checked Exception进行处理，不然不能通过编译。
+
+5、final、finally、finalize区别与使用
+-> 1、final 修饰符（关键字）
+-> final用于控制成员、方法或者是一个类是否可以被重写或者继承等功能。
+-> （1）如果类被声明为final，意味着它不能再派生出新的子类，不能作为父类被继承。
+-> （2）将变量或者方法声明为final，可以保证他们在使用中不被改变。其初始化可以在两个地方：一是其定义处，也就是说，在final变量定义时直接给其赋值；二是构造函数中。这2个地方只能选其一，要么在定义处直接给其赋值，要么在构造函数中给值，并且在以后的引用中，只能读取，不可修改。被声明为final的方法也同样只能使用，不能重写。
+->
+-> 2、finally(用于异常处理)
+-> 一般是用于异常处理中，提供finally块来执行任何的清楚操作，try{} catch(){} finally{}。finally关键字是对java异常处理模型的最佳补充。**finally结构使代码总会执行，不关有无异常发生。**使得finally可以维护对象的内部状态，并可以清理非内存资源。
+-> finally在try,catch中可以有，可以没有。如果trycatch中有finally则必须执行finally块中的操作。一般情况下，用于关闭文件的读写操作，或者是关闭数据库的连接等等。
+->
+-> 3、finalize（用于垃圾回收）
+-> finalize这个是方法名。在java中，允许使用finalize()方法在垃圾收集器将对象从内存中清理出去之前做必要的清理工作。这个方法是Object类中定义的，因此，所有的类都继承了它。finalize()方法是在垃圾收集器删除对象之前对这个对象调用的。
+-> 一旦垃圾回收器准备释放对象所占的内存空间，如果对象覆盖了Object的finalize()并且函数体内不为空，就会首先调用对象的finalize()，然后在下一次垃圾回收动作发生的时候真正回收对象所占的空间。
+-> 尽量避免使用finalize()：
+-> 1、finalize()不一定会被调用, 因为java的垃圾回收器的特性就决定了它不一定会被调用.
+-> 2、就算finalize()函数被调用, 它被调用的时间充满了不确定性, 因为程序中其他线程的优先级远远高于执行finalize()函数线程的优先级。也许等到finalize()被调用,数据库的连接池或者文件句柄早就耗尽了.
+-> 3、如果一种未被捕获的异常在使用finalize方法时被抛出，这个异常不会被捕获，finalize方法的终结过程也会终止，造成对象出于破坏的状态。被破坏的对象又很可能导致部分资源无法被回收, 造成浪费.
+-> 4、finalize()和垃圾回收器的运行本身就要耗费资源, 也许会导致程序的暂时停止.
+
