@@ -61,9 +61,9 @@ public class HookActivity extends BaseActivity {
 
         hook(hookBinding.button2);
 
-        Glide.with(this)
-                .load("")
-                .into(new ImageView(this));
+//        Glide.with(this)
+//                .load("")
+//                .into(new ImageView(this));
     }
 
     /**
@@ -163,7 +163,7 @@ public class HookActivity extends BaseActivity {
 
         @Override
         public void onClick(View v) {
-            Log.d("HookSetOnClickListener", "点击事件被hook到了");
+            Toast.makeText(v.getContext(),"静态代理，此处模拟 插入一个操作",Toast.LENGTH_SHORT).show();
             if (oriLis != null) {
                 oriLis.onClick(v);
             }

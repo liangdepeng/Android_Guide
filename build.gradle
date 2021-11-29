@@ -9,6 +9,14 @@ buildscript {
     }
     ext.kotlin_version = "1.5.21"
     repositories {
+        maven {
+            // 阿里云 central仓和jcenter仓的聚合仓
+           url 'https://maven.aliyun.com/repository/public'
+        }
+        maven {
+            // 阿里云 google仓库
+            url 'https://maven.aliyun.com/repository/google'
+        }
         google()
         mavenCentral()
     }
@@ -23,11 +31,20 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
-        mavenCentral()
+        maven {
+            // 阿里云 central仓和jcenter仓的聚合仓
+            url 'https://maven.aliyun.com/repository/public'
+        }
+        maven {
+            // 阿里云 google仓库
+            url 'https://maven.aliyun.com/repository/google'
+        }
         maven { url "../repository" }
         maven { url "https://jitpack.io" }
-     //   jcenter() // Warning: this repository is going to shut down soon
+
+        google()
+        mavenCentral()
+        //   jcenter() // Warning: this repository is going to shut down soon
     }
 }
 
