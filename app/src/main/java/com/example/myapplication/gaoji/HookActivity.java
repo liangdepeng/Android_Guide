@@ -1,18 +1,15 @@
 package com.example.myapplication.gaoji;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
-import com.example.myapplication.R;
 import com.example.myapplication.base.BaseActivity;
 import com.example.myapplication.databinding.ActivityHookBinding;
 
@@ -105,12 +102,6 @@ public class HookActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        Proxy.newProxyInstance(getClassLoader(), new Class[]{View.OnClickListener.class}, new InvocationHandler() {
-            @Override
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                return null;
-            }
-        });
     }
 
 
@@ -164,7 +155,7 @@ public class HookActivity extends BaseActivity {
     // 还真是这样,自定义代理类
     static class StaticsProxyOnClickListener implements View.OnClickListener {
 
-        private View.OnClickListener oriLis;
+        private final View.OnClickListener oriLis;
 
         public StaticsProxyOnClickListener(View.OnClickListener oriLis) {
             this.oriLis = oriLis;

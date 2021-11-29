@@ -2,7 +2,7 @@
 
 apply from: 'config.gradle'
 apply from: 'config2.gradle'
-
+// 阿里云国内镜像地址 https://developer.aliyun.com/mvn/guide
 buildscript {
     ext {
         compose_version = '1.0.1'
