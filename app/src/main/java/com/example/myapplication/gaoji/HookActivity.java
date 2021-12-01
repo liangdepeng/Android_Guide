@@ -60,10 +60,6 @@ public class HookActivity extends BaseActivity {
         hookBinding.button3.setOnClickListener(proxyListener);
 
         hook(hookBinding.button2);
-
-//        Glide.with(this)
-//                .load("")
-//                .into(new ImageView(this));
     }
 
     /**

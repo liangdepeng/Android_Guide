@@ -17,6 +17,8 @@ import com.tamsiree.rxkit.RxTool;
 
 import cn.example.common_module.AppContext;
 import cn.example.common_module.JumpServiceFactory;
+import cn.example.common_module.ToastUtil;
+import cn.example.common_module.kotlinutil.ToastUtilKt;
 
 /**
  * Created by ldp.
@@ -42,6 +44,9 @@ public class MyApplication extends Application {
         JumpServiceFactory.INSTANCE.init(AppComponent.class.getName());
         // application context
         AppContext.init(context);
+        // Toast 线程 初始化
+        ToastUtil.init(context);
+        ToastUtilKt.Companion.initLib(context);
         // 监控卡顿
         Looper.getMainLooper().setMessageLogging(new Printer() {
             @Override

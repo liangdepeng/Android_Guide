@@ -109,7 +109,7 @@ public class SingleThreadManager {
     }
 
     private static void checkNotNull(String url) throws Exception {
-        if (TextUtils.isEmpty(url))
+        if (url == null || url.length() == 0)
             throw new IllegalArgumentException("url 不能为空");
     }
 

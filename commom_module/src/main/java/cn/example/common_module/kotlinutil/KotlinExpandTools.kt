@@ -89,7 +89,7 @@ fun Any.spToPx(dp: Float): Int {
 
 val Any.userTag: String
     get() {
-        return "user_log_tag"
+        return javaClass.simpleName ?: "user_log_tag"
     }
 
 var <T : View> T.lastClickMills: Long

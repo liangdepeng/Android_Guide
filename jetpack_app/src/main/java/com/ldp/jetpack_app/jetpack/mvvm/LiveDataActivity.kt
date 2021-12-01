@@ -46,5 +46,6 @@ class LiveDataActivity : AppCompatActivity() {
         viewBinding.button1.setOnClickListener {
             liveViewModel.requestData()
         }
+
     }
 }

@@ -100,6 +100,7 @@ class KotlinXCActivity : BaseActivity() {
         runBlocking {
             repeat(100) {
                 Log.e("kotlinXc", "协程执行 $it 线程=${Thread.currentThread().toString()}")
+                delay(20)
             }
         }
         Log.e("kotlinXc", "协程执行结束 当前线程=${Thread.currentThread().toString()}")

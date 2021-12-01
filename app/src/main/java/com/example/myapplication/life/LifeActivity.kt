@@ -3,6 +3,8 @@ package com.example.myapplication.life
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
+import cn.example.common_module.ToastUtil
+import cn.example.common_module.kotlinutil.ToastUtilKt
 import com.example.myapplication.R
 import com.example.myapplication.base.BaseActivity
 import com.example.myapplication.databinding.ActivityLifeBinding
@@ -54,13 +56,16 @@ class LifeActivity : BaseActivity() {
             if (!fragment.isAdded) {
                 beginTransaction.add(R.id.fl, fragment)
                 beginTransaction.commitAllowingStateLoss()
+                ToastUtilKt.show("fragment 添加成功")
                 return@setOnClickListener
             }
 
             if (fragment.isVisible) {
                 beginTransaction.hide(fragment)
+                ToastUtil.show("fragment 隐藏成功")
             } else {
                 beginTransaction.show(fragment)
+                ToastUtil.show("fragment 显示成功")
             }
             beginTransaction.commitAllowingStateLoss()
         }

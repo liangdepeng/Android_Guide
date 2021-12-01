@@ -1,0 +1,112 @@
+
+
+
+
+/** handler 延时消息解析 **/
+handler.postDelayed(Runnable action, long delayMillis)
+// 基本原理 每个消息会有一个时间值 根据大小 时间早晚 排序 延迟消息往队列后面放
+// 比延时消息靠前的往延时消息前面放
+
+/** 消息 延迟发送 **/
+    public final boolean sendMessageDelayed(@NonNull Message msg, long delayMillis) {
+        // 异常处理 小于0 重置0
+        if (delayMillis < 0) {
+            delayMillis = 0;
+        }
+        // SystemClock.uptimeMillis() 一个相对时间 指的是当前系统正常开机到现在的时间
+        // 敲重点 后续这个时间就是用来 给消息排序的 实现延迟发送
+        return sendMessageAtTime(msg, SystemClock.uptimeMillis() + delayMillis);
+    }
+
+/** handler.sendxxxMessage 和 postxxx 方法 最终都会调用这个方法  **/
+    public boolean sendMessageAtTime(@NonNull Message msg, long uptimeMillis) {
+    // 消息队列 MessageQueue
+        MessageQueue queue = mQueue;
+        // 判空
+        if (queue == null) {
+            RuntimeException e = new RuntimeException(
+                    this + " sendMessageAtTime() called with no mQueue");
+            Log.w("Looper", e.getMessage(), e);
+            return false;
+        }
+        // 将队列 插入消息队列
+        return enqueueMessage(queue, msg, uptimeMillis);
+    }
+
+/** handler enqueueMessage 处理 **/
+   private boolean enqueueMessage(@NonNull MessageQueue queue, @NonNull Message msg,
+           long uptimeMillis) {
+       // 设置 target 消息的分发对象 就是发送消息的 handler
+       // 通过这个可以区分 是哪个 handler 发送的消息 要去处理它
+       // 引申 ：可以实现多个 handler 处理不同类别的消息 一个线程只能有一个Looper和messageQueue ，可以有多个 handler
+       msg.target = this;
+       msg.workSourceUid = ThreadLocalWorkSource.getUid();
+
+       // 是否是同步消息
+       if (mAsynchronous) {
+           msg.setAsynchronous(true);
+       }
+       // 移步 MessageQueue enqueueMessage
+       return queue.enqueueMessage(msg, uptimeMillis);
+   }
+
+/** MessageQueue enqueueMessage 处理 **/
+boolean enqueueMessage(Message msg, long when) {
+        if (msg.target == null) {
+            throw new IllegalArgumentException("Message must have a target.");
+        }
+
+        synchronized (this) {
+            if (msg.isInUse()) {
+                throw new IllegalStateException(msg + " This message is already in use.");
+            }
+
+            if (mQuitting) {
+                IllegalStateException e = new IllegalStateException(
+                        msg.target + " sending message to a Handler on a dead thread");
+                Log.w(TAG, e.getMessage(), e);
+                msg.recycle();
+                return false;
+            }
+
+            msg.markInUse();
+            // 要插入的消息的相对时间戳 + 延时（如果有，没有就是0）
+            msg.when = when;
+            // 消息队列的最近消息
+            Message p = mMessages;
+            boolean needWake;
+            // 敲重点，根据消息相对时间戳大小比较 小的（时间短的）将会插入大的（时间长的）前面
+            if (p == null || when == 0 || when < p.when) {
+                // New head, wake up the event queue if blocked.
+                // 新的延时短的消息 放到 延时长的消息 保证同步消息队列执行顺序
+                msg.next = p;
+                mMessages = msg;
+                needWake = mBlocked;
+            } else {
+                // Inserted within the middle of the queue.  Usually we don't have to wake
+                // up the event queue unless there is a barrier at the head of the queue
+                // and the message is the earliest asynchronous message in the queue.
+                needWake = mBlocked && p.target == null && msg.isAsynchronous();
+                Message prev;
+                for (;;) {
+                    prev = p;
+                    p = p.next;
+                    if (p == null || when < p.when) {
+                        break;
+                    }
+                    if (needWake && p.isAsynchronous()) {
+                        needWake = false;
+                    }
+                }
+                // 正常插入消息队列后面
+                msg.next = p; // invariant: p == prev.next
+                prev.next = msg;
+            }
+
+            // We can assume mPtr != 0 because mQuitting is false.
+            if (needWake) {
+                nativeWake(mPtr);
+            }
+        }
+        return true;
+    }
