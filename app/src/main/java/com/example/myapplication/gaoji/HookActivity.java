@@ -100,6 +100,24 @@ public class HookActivity extends BaseActivity {
 
     }
 
+    //自定义代理类
+    static class StaticsProxyOnClickListener implements View.OnClickListener {
+
+        private final View.OnClickListener oriLis;
+
+        public StaticsProxyOnClickListener(View.OnClickListener oriLis) {
+            this.oriLis = oriLis;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(v.getContext(),"静态代理，此处模拟 插入一个操作",Toast.LENGTH_SHORT).show();
+            if (oriLis != null) {
+                oriLis.onClick(v);
+            }
+        }
+    }
+
 
 //    /**
 //     * hook的核心代码
@@ -148,23 +166,6 @@ public class HookActivity extends BaseActivity {
 //
 //    }
 
-    // 还真是这样,自定义代理类
-    static class StaticsProxyOnClickListener implements View.OnClickListener {
-
-        private final View.OnClickListener oriLis;
-
-        public StaticsProxyOnClickListener(View.OnClickListener oriLis) {
-            this.oriLis = oriLis;
-        }
-
-        @Override
-        public void onClick(View v) {
-            Toast.makeText(v.getContext(),"静态代理，此处模拟 插入一个操作",Toast.LENGTH_SHORT).show();
-            if (oriLis != null) {
-                oriLis.onClick(v);
-            }
-        }
-    }
 
 }
 

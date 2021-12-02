@@ -15,7 +15,7 @@ import java.lang.reflect.ParameterizedType
  *
  * Summary: 封装了 获取 viewbinding 和 viewmodel 的基类
  */
-abstract class BaseMvvmActivity<VB : ViewBinding, VM : ViewModel> : AppCompatActivity() {
+abstract class BaseMvvmActivity<VB : ViewBinding, VM : ViewModel> : BaseActivityKt() {
 
     lateinit var mViewBinding: VB
     lateinit var mViewModel: VM

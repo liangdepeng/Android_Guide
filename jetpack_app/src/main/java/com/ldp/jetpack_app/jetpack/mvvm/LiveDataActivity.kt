@@ -1,17 +1,16 @@
 package com.ldp.jetpack_app.jetpack.mvvm
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.ldp.jetpack_app.R
 import com.ldp.jetpack_app.databinding.ActivityLiveDataBinding
+import com.ldp.jetpack_app.jetpack.base.BaseActivityKt
 
 /**
  * jetpack 组件 lifecycle + livedata + viewModel + viewBinding
  */
-class LiveDataActivity : AppCompatActivity() {
+class LiveDataActivity : BaseActivityKt() {
 
     /**
      * ViewBinding 绑定布局 无需 finviewbyid 空安全 类型安全

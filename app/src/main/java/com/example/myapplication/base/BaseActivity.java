@@ -6,13 +6,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import abc.common.util.KtExpandUtil;
 
 /**
  * Created by ldp.
@@ -112,11 +109,7 @@ public class BaseActivity extends AppCompatActivity {
             };
         }
 
-        if (isMainThread()) {
-            showRunnable.run();
-        } else {
-            getMainHandler().post(showRunnable);
-        }
+        runOnUiThread(showRunnable);
     }
 
     public void dismissProgressDialog() {
@@ -131,7 +124,8 @@ public class BaseActivity extends AppCompatActivity {
         return handler;
     }
 
-    public final boolean isMainThread() {
+    //
+    public final boolean isUiThread() {
         return Looper.myLooper() == Looper.getMainLooper();
     }
 }
